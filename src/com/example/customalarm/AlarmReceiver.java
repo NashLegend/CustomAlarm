@@ -12,8 +12,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO 自动生成的方法存根
-
+		//在此唤起执行闹铃的Activity
 	}
+	
+	
 
 }

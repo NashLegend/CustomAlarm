@@ -30,6 +30,7 @@
         <receiver android:name=".BootReceiver" >
             <intent-filter>
                 <action android:name="com.example.customalarm.reset" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
