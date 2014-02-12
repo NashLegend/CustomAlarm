@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.example.customalarm.db.AlarmColumn;
+import com.example.customalarm.db.AlarmHelper;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -19,15 +20,17 @@ import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
 public class Alarm {
-	private String groupID;// 按理说只有weekly的能用上。不支持每月和每年同时设置几天……
+	private String groupID;// 按理说只有weekly的能用上。不支持每月和每年同时设置几天……//完全用不上啊，可以考虑删除了
 	private String id = "";// id为UUID;这可能会导致有两个完全相同时间的闹钟，而系统把它们当作两个。需要在添加的时候进行检测
 	private GregorianCalendar alarmCalendar;// 响铃日期
 	private int[] days_of_some;// group里面的几天
 	private String tag;// example:birthday,festival or some what;
-	private int type;// ALARM_DAILY,ALARM_WEEKLY,etc..
-	private boolean cancelable = true;// if set false,the alarm won't be
-										// canceled when ringing.
+	private int type;// ALARM_DAILY,ALARM_WEEKLY等等
+	private boolean cancelable = true;// 如果为true，则不可取消直到响铃完毕……
+	private boolean available = true;// 是否关闭
+	private String remark = null;// 备注
 	private Context mContext;
+
 	private Intent intent;
 
 	public static final int ALARM_DAILY = 1;
@@ -44,6 +47,8 @@ public class Alarm {
 	public static final String ALARM_CANCELABLE = "ALARM_CANCELABLE";
 	public static final String ALARM_GROUP_ID = "ALARM_GROUP_ID";
 	public static final String ALARM_DAYS_OF_SOME = "ALARM_DAYS_OF_SOME";
+	public static final String ALARM_AVAILABLE = "ALARM_AVAILABLE";
+	public static final String ALARM_REMARK = "ALARM_REMARK";
 
 	public static final String ALARM_ACTION = "com.example.customalarm.alarm";
 	public static final String RESET_ACTION = "com.example.customalarm.reset";
@@ -55,24 +60,47 @@ public class Alarm {
 		setTag(bundle.getString(ALARM_TAG));
 		setType(bundle.getInt(ALARM_TYPE));
 		setId(bundle.getString(ALARM_ID));
-		setAlarmcalendar((GregorianCalendar) bundle
+		setAlarmCalendar((GregorianCalendar) bundle
 				.getSerializable(ALARM_CALENDAR));
+		setAvailable(bundle.getBoolean(ALARM_AVAILABLE));
+		setRemark(bundle.getString(ALARM_REMARK));
+		activate();
 	}
 
 	/**
-	 * 设定闹钟
+	 * 设置闹铃AlarmManager所使用的intent
+	 */
+	private void setIntent() {
+		intent = new Intent();
+		intent.putExtra(ALARM_CANCELABLE, cancelable);
+		intent.putExtra(ALARM_TAG, tag);
+		intent.putExtra(ALARM_TYPE, type);
+		intent.putExtra(ALARM_ID, id);
+		intent.putExtra(ALARM_GROUP_ID, groupID);
+		intent.putExtra(ALARM_REMARK, remark);
+		intent.setAction(ALARM_ACTION);
+		intent.setData(Uri.fromParts("alarm", "id", id));
+	}
+	
+	/**
+	 * 如果对闹铃进行了初始化或者修改，那么就一定要调用activate()重新设置一次闹铃
+	 * 当然只是设置，能不能打开还要看available
+	 */
+	public void activate() {
+		setIntent();
+		if (available) {
+			setUp();
+		}else {
+			cancel();
+		}
+	}
+
+	/**
+	 * 打开闹钟
 	 */
 	public void setUp() {
+		setIntent();
 		if (alarmCalendar != null) {
-			intent = new Intent();
-			intent.putExtra(ALARM_CANCELABLE, cancelable);
-			intent.putExtra(ALARM_TAG, tag);
-			intent.putExtra(ALARM_TYPE, type);
-			intent.putExtra(ALARM_ID, id);
-			intent.putExtra(ALARM_GROUP_ID, groupID);
-			intent.setAction(ALARM_ACTION);
-			intent.setData(Uri.fromParts("alarm", "id", id));
-
 			switch (type) {
 			case ALARM_DAILY:
 				setDailyAlarm();
@@ -98,15 +126,35 @@ public class Alarm {
 		}
 	}
 
+	/**
+	 * 取消闹钟，仍然保存在数据库里面，只是AlarmManager不再工作
+	 */
 	public void cancel() {
-		// 要修改先取消
+		setIntent();
+		PendingIntent pendingIntent;
+		AlarmManager manager = (AlarmManager) mContext
+				.getSystemService(Context.ALARM_SERVICE);
+		//如果days_of_some不为空，则为一个闹铃组，要取消一批。否则仅仅取消一个足矣
+		if (days_of_some != null && days_of_some.length > 0) {
+			for (int j = 0; j < days_of_some.length; j++) {
+				int k = days_of_some[j];
+				pendingIntent = PendingIntent.getBroadcast(mContext, k, intent,
+						PendingIntent.FLAG_CANCEL_CURRENT);
+				manager.cancel(pendingIntent);
+			}
+		} else {
+			pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			manager.cancel(pendingIntent);
+		}
 	}
 
 	/**
-	 * 存储到数据库
+	 * 取消并删除闹钟
 	 */
-	public void storeInDB() {
-
+	public void delete() {
+		cancel();
+		deleteFromDB(this);
 	}
 
 	/**
@@ -172,7 +220,8 @@ public class Alarm {
 		// 有两个办法：一是建立data规则，通过设置不同的data判断
 		// 二是设置getBroadcast中第二个参数 （int requestCode）来区分。这个参数目前API中没有使用到
 		// Android URI
-		// 这里采用两个都使用的方法。所有的intent都进行了intent.setData(Uri.fromParts("alarm", "id", id));操作以区分开一般闹钟。
+		// 这里采用两个都使用的方法。所有的intent都进行了intent.setData(Uri.fromParts("alarm", "id",
+		// id));操作以区分开一般闹钟。
 		// 而在weekly闹钟里因为设置了多个闹钟，而一个intent又只能设置一个data，所以在week里为区分不同闹钟，将使用第二种方法。
 		// 将requestCode设置为day,足以分开不同的PendingIntent。以id区分外部，以requestCode区分内部
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -275,7 +324,7 @@ public class Alarm {
 		this.type = type;
 	}
 
-	public boolean getCancelable() {
+	public boolean isCancelable() {
 		return cancelable;
 	}
 
@@ -291,11 +340,11 @@ public class Alarm {
 		this.id = id;
 	}
 
-	public GregorianCalendar getAlarmcalendar() {
+	public GregorianCalendar getAlarmCalendar() {
 		return alarmCalendar;
 	}
 
-	public void setAlarmcalendar(GregorianCalendar alarmcalendar) {
+	public void setAlarmCalendar(GregorianCalendar alarmcalendar) {
 		this.alarmCalendar = alarmcalendar;
 	}
 
@@ -316,6 +365,57 @@ public class Alarm {
 			days_of_some = new int[0];
 		}
 		this.days_of_some = days_of_some;
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	/**
+	 * 仅仅修改available值，并不实际的打开或者关闭闹钟
+	 */
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Context getmContext() {
+		return mContext;
+	}
+
+	public void setmContext(Context mContext) {
+		this.mContext = mContext;
+	}
+
+	/**
+	 * 存储到数据库，只在用户创建时调用一次
+	 */
+	public static void storeInDB(Alarm alarm) {
+		AlarmHelper helper = new AlarmHelper(alarm.getmContext());
+		helper.insert(alarm);
+	}
+
+	/**
+	 * 从数据库删除
+	 */
+	public static void deleteFromDB(Alarm alarm) {
+		AlarmHelper helper = new AlarmHelper(alarm.getmContext());
+		helper.delete(alarm);
+	}
+
+	/**
+	 * 在数据库中修改
+	 */
+	public static boolean editAlarmInDB(Alarm alarm) {
+		AlarmHelper helper = new AlarmHelper(alarm.getmContext());
+		return helper.edit(alarm);
 	}
 
 	/**

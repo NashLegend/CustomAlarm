@@ -11,6 +11,8 @@ public class AlarmColumn implements BaseColumns {
 	public static final String ALARM_CANCELABLE = "ALARM_CANCELABLE";
 	public static final String ALARM_TAG = "ALARM_TAG";
 	public static final String ALARM_DAYS = "ALARM_DAYS";
+	public static final String ALARM_AVAILABLE = "ALARM_AVAILABLE";
+	public static final String ALARM_REMARK = "ALARM_REMARK";
 
 	public static final int ALARM_ID_COLUMN = 1;
 	public static final int ALARM_GROUPID_COLUMN = 2;
@@ -19,9 +21,12 @@ public class AlarmColumn implements BaseColumns {
 	public static final int ALARM_CANCELABLE_COLUMN = 5;
 	public static final int ALARM_TAG_COLUMN = 6;
 	public static final int ALARM_DAYS_COLUMN = 7;
+	public static final int ALARM_AVAILABLE_COLUMN = 8;
+	public static final int ALARM_REMARK_COLUMN = 9;
 
 	// 查询结果集
 	public static final String[] PROJECTION = { _ID, ALARM_ID, ALARM_GROUPID,
-			ALARM_CALENDAR, ALARM_TYPE, ALARM_CANCELABLE, ALARM_TAG, ALARM_DAYS };
+			ALARM_CALENDAR, ALARM_TYPE, ALARM_CANCELABLE, ALARM_TAG,
+			ALARM_DAYS, ALARM_AVAILABLE, ALARM_REMARK };
 
 }

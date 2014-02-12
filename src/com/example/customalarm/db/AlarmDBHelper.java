@@ -17,7 +17,9 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
 			+ AlarmColumn.ALARM_TYPE + " text,"
 			+ AlarmColumn.ALARM_CANCELABLE + " text,"
 			+ AlarmColumn.ALARM_TAG + " text,"
-			+ AlarmColumn.ALARM_DAYS + " text)";
+			+ AlarmColumn.ALARM_DAYS + " text,"
+			+ AlarmColumn.ALARM_AVAILABLE + " text,"
+			+ AlarmColumn.ALARM_REMARK + " text)";
 	public AlarmDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}

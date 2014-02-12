@@ -22,17 +22,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".AlarmReceiver" >
+
+        <receiver android:name="com.example.customalarm.AlarmReceiver" >
             <intent-filter>
                 <action android:name="com.example.customalarm.alarm" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".BootReceiver" >
+        <receiver android:name="com.example.customalarm.BootReceiver" >
             <intent-filter>
                 <action android:name="com.example.customalarm.reset" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="com.example.customalarm.AlarmDetail"
+            android:label="@string/title_activity_alarm_detail" >
+        </activity>
     </application>
 
 </manifest>
