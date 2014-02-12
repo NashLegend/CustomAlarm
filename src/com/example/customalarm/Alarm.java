@@ -84,6 +84,7 @@ public class Alarm {
 	
 	/**
 	 * 如果对闹铃进行了初始化或者修改，那么就一定要调用activate()重新设置一次闹铃
+	 * 不进行数据库操作，数据库的修改操作在外部进行。
 	 * 当然只是设置，能不能打开还要看available
 	 */
 	public void activate() {
@@ -94,12 +95,22 @@ public class Alarm {
 			cancel();
 		}
 	}
+	
+	/**
+	 * 保存对闹钟的修改，并运行activate
+	 */
+	public void edit() {
+		if (Alarm.editAlarmInDB(this)) {
+			activate();
+		}else {
+			//存储失败，要趁着intent没有修改，从intent中恢复……
+		}
+	}
 
 	/**
-	 * 打开闹钟
+	 * 运行闹钟
 	 */
-	public void setUp() {
-		setIntent();
+	private void setUp() {
 		if (alarmCalendar != null) {
 			switch (type) {
 			case ALARM_DAILY:
@@ -128,6 +139,7 @@ public class Alarm {
 
 	/**
 	 * 取消闹钟，仍然保存在数据库里面，只是AlarmManager不再工作
+	 * 只做Alarm工作，不处理数据库
 	 */
 	public void cancel() {
 		setIntent();
@@ -156,18 +168,18 @@ public class Alarm {
 		cancel();
 		deleteFromDB(this);
 	}
-
+	
 	/**
 	 * 设置倒计时闹钟 倒计时本质上就是一次性闹钟
 	 */
-	public void setCountDownAlarm() {
+	private void setCountDownAlarm() {
 		setOneTimeAlarm();
 	}
 
 	/**
 	 * 设置一次性闹钟
 	 */
-	public void setOneTimeAlarm() {
+	private void setOneTimeAlarm() {
 		if (alarmCalendar.getTimeInMillis() - System.currentTimeMillis() > 0) {
 			// 最后一个参数必须是PendingIntent.FLAG_UPDATE_CURRENT，否则BroadcastReceiver将收不到参数。
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
@@ -185,7 +197,7 @@ public class Alarm {
 	/**
 	 * 设置每日闹钟
 	 */
-	public void setDailyAlarm() {
+	private void setDailyAlarm() {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.HOUR_OF_DAY,
 				alarmCalendar.get(Calendar.HOUR_OF_DAY));
@@ -211,7 +223,7 @@ public class Alarm {
 	/**
 	 * 设置每周闹钟，每周可能有几天，如工作日，周末等等
 	 */
-	public void setWeeklyAlarm() {
+	private void setWeeklyAlarm() {
 		// 一周可能有几天，一个AlarmManager不够用，使用几个AlarmManager然后采用setRepeating就行了
 		// intent必须不同，否则会被系统认为是同一个，结果是只有最后一个闹钟生效（第一个闹钟响之前设置的闹钟中）
 		// 如果仅仅“extras”的不同并不会导致intent对比起来不同，所以会导致合并成一个Alarm
@@ -246,7 +258,7 @@ public class Alarm {
 	/**
 	 * 设置月度闹钟，一次设置一个
 	 */
-	public void setMonthlyAlarm() {
+	private void setMonthlyAlarm() {
 		// 每个月长度不一样，所以不能用setRepeating，只能设置一个月的，然后隔一段时间再重新设置一次
 		GregorianCalendar calendar = new GregorianCalendar();
 
@@ -279,7 +291,7 @@ public class Alarm {
 	/**
 	 * 设置年度闹钟，一次只能设置一个
 	 */
-	public void setYearlyAlarm() {
+	private void setYearlyAlarm() {
 		// The number of days in every month is not always the same
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MONTH, alarmCalendar.get(Calendar.MONTH));

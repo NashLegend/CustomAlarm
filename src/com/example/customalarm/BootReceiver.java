@@ -23,7 +23,7 @@ public class BootReceiver extends BroadcastReceiver {
 			//如果每天00：00重建闹钟的话，那么00：00时响的闹钟会不会响呢
 			//所以最后错开一点，因为闹钟没有秒数，所以设置为00：00：30秒何如。
 			//不论是什么闹钟，都会保证如果第二天有闹钟的话就会设置上的，所以不用担心00：00的闹钟不会设置上
-			alarm.setUp();
+			alarm.activate();
 		}
 	}
 
