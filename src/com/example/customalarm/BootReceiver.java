@@ -18,6 +18,7 @@ public class BootReceiver extends BroadcastReceiver {
 		// reset alarms on boot or every day at 00:00
 		ArrayList<Alarm> alarms = getAllAlarms();
 		for (Alarm alarm : alarms) {
+			//Test
 			//当重启后，所有的都应该恢复，而如果这是定时任务，那么只要恢复月度和年度的就可以了.
 			//如果每天00：00重建闹钟的话，那么00：00时响的闹钟会不会响呢
 			//所以最后错开一点，因为闹钟没有秒数，所以设置为00：00：30秒何如。
