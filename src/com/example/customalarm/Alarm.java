@@ -1,8 +1,14 @@
 package com.example.customalarm;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
+import com.example.customalarm.db.AlarmColumn;
+
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -10,6 +16,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+@SuppressLint("SimpleDateFormat")
 public class Alarm {
 	private String groupID;// 按理说只有weekly的能用上。不支持每月和每年同时设置几天……，除非是蓝翔校长，每月8号、18号、28号开学
 	private String id = "";// id为UUID;这可能会导致有两个完全相同时间的闹钟，而系统把它们当作两个。需要在添加的时候进行检测
@@ -46,45 +53,50 @@ public class Alarm {
 		setCancelable(bundle.getBoolean(ALARM_CANCELABLE));
 		setTag(bundle.getString(ALARM_TAG));
 		setType(bundle.getInt(ALARM_TYPE));
-		setIdentifier(bundle.getString(ALARM_ID));
-		setAlarmcalendar((GregorianCalendar) bundle
-				.getSerializable(ALARM_CALENDAR));
+		setId(bundle.getString(ALARM_ID));
+		setAlarmcalendar((GregorianCalendar) bundle.getSerializable(ALARM_CALENDAR));
 	}
 
 	/**
 	 * 设定闹钟
 	 */
 	public void setUp() {
-		intent = new Intent();
-		intent.putExtra(ALARM_CANCELABLE, cancelable);
-		intent.putExtra(ALARM_TAG, tag);
-		intent.putExtra(ALARM_TYPE, type);
-		intent.putExtra(ALARM_ID, id);
-		intent.putExtra(ALARM_GROUP_ID, groupID);
-		intent.setAction(ALARM_ACTION);
+		if (alarmCalendar != null) {
+			intent = new Intent();
+			intent.putExtra(ALARM_CANCELABLE, cancelable);
+			intent.putExtra(ALARM_TAG, tag);
+			intent.putExtra(ALARM_TYPE, type);
+			intent.putExtra(ALARM_ID, id);
+			intent.putExtra(ALARM_GROUP_ID, groupID);
+			intent.setAction(ALARM_ACTION);
 
-		switch (type) {
-		case ALARM_DAILY:
-			setDailyAlarm();
-			break;
-		case ALARM_WEEKLY:
-			setWeeklyAlarm();
-			break;
-		case ALARM_MONTHLY:
-			setMonthlyAlarm();
-			break;
-		case ALARM_YEARLY:
-			setYearlyAlarm();
-			break;
-		case ALARM_ONE_TIME:
-			setOneTimeAlarm();
-			break;
-		case ALARM_COUNT_DOWN:
-			setCountDownAlarm();
-			break;
-		default:
-			break;
+			switch (type) {
+			case ALARM_DAILY:
+				setDailyAlarm();
+				break;
+			case ALARM_WEEKLY:
+				setWeeklyAlarm();
+				break;
+			case ALARM_MONTHLY:
+				setMonthlyAlarm();
+				break;
+			case ALARM_YEARLY:
+				setYearlyAlarm();
+				break;
+			case ALARM_ONE_TIME:
+				setOneTimeAlarm();
+				break;
+			case ALARM_COUNT_DOWN:
+				setCountDownAlarm();
+				break;
+			default:
+				break;
+			}
 		}
+	}
+	
+	public void cancel() {
+		//要修改先取消
 	}
 
 	/**
@@ -106,12 +118,13 @@ public class Alarm {
 	 */
 	public void setOneTimeAlarm() {
 		if (alarmCalendar.getTimeInMillis() - System.currentTimeMillis() > 0) {
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
-					0, intent, 0);
+			//最后一个参数必须是PendingIntent.FLAG_UPDATE_CURRENT，否则BroadcastReceiver将收不到参数。
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager manager = (AlarmManager) mContext
 					.getSystemService(Context.ALARM_SERVICE);
-			manager.set(AlarmManager.RTC_WAKEUP,
-					alarmCalendar.getTimeInMillis(), pendingIntent);
+			manager.set(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(),
+					pendingIntent);
 		} else {
 			Toast.makeText(mContext, "Too early that alarm won't alarm",
 					Toast.LENGTH_SHORT).show();
@@ -123,8 +136,7 @@ public class Alarm {
 	 */
 	public void setDailyAlarm() {
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.set(Calendar.HOUR_OF_DAY,
-				alarmCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.HOUR_OF_DAY, alarmCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, alarmCalendar.get(Calendar.MINUTE));
 		calendar.set(Calendar.SECOND, alarmCalendar.get(Calendar.SECOND));
 		long mills = 0L;
@@ -136,12 +148,10 @@ public class Alarm {
 			mills = calendar.getTimeInMillis() + 86400000;
 		}
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
-		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000,
-				pendingIntent);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000, pendingIntent);
 	}
 
 	/**
@@ -150,20 +160,27 @@ public class Alarm {
 	public void setWeeklyAlarm() {
 		// 一周可能有几天，一个AlarmManager不够用，使用几个AlarmManager然后采用setRepeating就行了
 		GregorianCalendar calendar = new GregorianCalendar();
+		//intent必须不同，否则会被系统认为是同一个，结果是只有最后一个闹钟生效（第一个闹钟响之前设置的闹钟中）
+		//如果仅仅“extras”的不同并不会导致intent对比起来不同，所以会导致合并成一个Alarm
+		//intent通过intent.filterEquals(intent2)来对比
+		//只有action, data, type, class, 和categories都相同时才会认为是一个
+		//TODO 有两个办法：一是建立data规则，通过设置不同的data判断
+		//TODO 二是设置getBroadcast中第二个参数 （int requestCode）来区分。这个参数目前API中没有使用到
+		//Android URI
 		for (int i = 0; i < days_of_some.length; i++) {
 			int day = days_of_some[i];
 			calendar.set(Calendar.DAY_OF_WEEK, day);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
-					0, intent, 0);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager manager = (AlarmManager) mContext
 					.getSystemService(Context.ALARM_SERVICE);
 			if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
-				manager.setRepeating(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis(), 86400000 * 7, pendingIntent);
+				manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+						86400000 * 7, pendingIntent);
 			} else {
 				manager.setRepeating(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis() + 86400000 * 7,
-						86400000 * 7, pendingIntent);
+						calendar.getTimeInMillis() + 86400000 * 7, 86400000 * 7,
+						pendingIntent);
 			}
 		}
 	}
@@ -180,8 +197,7 @@ public class Alarm {
 		long timemills = 0L;
 		calendar.set(Calendar.DAY_OF_MONTH, day);
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		// 查检日期是否合法，不合法则表示本月没有这一天，day将肯定大于28，本次将不再设定此闹铃，将闹铃的设置推迟到下次BootReceiver接收到消息
@@ -194,8 +210,7 @@ public class Alarm {
 				calendar = getNextMonthCalendar(calendar);
 				if (isValidDate(calendar)) {
 					timemills = calendar.getTimeInMillis();
-					manager.set(AlarmManager.RTC_WAKEUP, timemills,
-							pendingIntent);
+					manager.set(AlarmManager.RTC_WAKEUP, timemills, pendingIntent);
 				}
 			}
 		}
@@ -208,17 +223,14 @@ public class Alarm {
 		// The number of days in every month is not always the same
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MONTH, alarmCalendar.get(Calendar.MONTH));
-		calendar.set(Calendar.DAY_OF_MONTH,
-				alarmCalendar.get(Calendar.DAY_OF_MONTH));
-		calendar.set(Calendar.HOUR_OF_DAY,
-				alarmCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.DAY_OF_MONTH, alarmCalendar.get(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY, alarmCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, alarmCalendar.get(Calendar.MINUTE));
 
 		// 在12月31号，闹钟为1月1号，则此if不成立，因为闹钟将发生在明年也就是明天，此时最好是设置上
 		// 设定为期一年的时间太长，一般手机都会关过几次机。如果很快就到下一年了，则只设置下一年的距今30天以内的。
 		// 反正每天都会定时检查一下闹钟
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
@@ -227,8 +239,8 @@ public class Alarm {
 		} else {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			if (calendar.getTimeInMillis() - System.currentTimeMillis() > 86400000 * 30) {
-				manager.set(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis(), pendingIntent);
+				manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+						pendingIntent);
 			}
 		}
 	}
@@ -249,7 +261,7 @@ public class Alarm {
 		this.type = type;
 	}
 
-	public boolean isCancelable() {
+	public boolean getCancelable() {
 		return cancelable;
 	}
 
@@ -257,12 +269,12 @@ public class Alarm {
 		this.cancelable = cancelable;
 	}
 
-	public String getIdentifier() {
+	public String getId() {
 		return id;
 	}
 
-	public void setIdentifier(String identifier) {
-		this.id = identifier;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public GregorianCalendar getAlarmcalendar() {
@@ -286,6 +298,9 @@ public class Alarm {
 	}
 
 	public void setDays_of_some(int[] days_of_some) {
+		if (days_of_some == null) {
+			days_of_some = new int[0];
+		}
 		this.days_of_some = days_of_some;
 	}
 
@@ -295,8 +310,7 @@ public class Alarm {
 	 * @param calendar
 	 * @return
 	 */
-	public static GregorianCalendar getNextMonthCalendar(
-			GregorianCalendar calendar) {
+	public static GregorianCalendar getNextMonthCalendar(GregorianCalendar calendar) {
 		if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			calendar.set(Calendar.MONTH, Calendar.JANUARY);
@@ -349,14 +363,62 @@ public class Alarm {
 	public static void startAlarmRestore(Context context) {
 		Intent intent = new Intent();
 		intent.setAction(Alarm.ALARM_ACTION);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-				intent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
 		// manager.cancel(pendingIntent);//到底要不要先取消，按理说不要
 		// 应该是每天00：00检查一次
-		manager.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis(), 86400000, pendingIntent);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+				86400000, pendingIntent);
+	}
+
+	public static GregorianCalendar String2Calendar(String string) {
+		// 日期
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		GregorianCalendar calendar = null;
+		try {
+			calendar = new GregorianCalendar();
+			Date date = format.parse(string);
+			calendar.setTime(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			calendar = null;
+		}
+		return calendar;
+	}
+
+	public static String Calendar2String(GregorianCalendar calendar) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return format.format(calendar.getTime());
+	}
+
+	public static String Days2String(int[] days) {
+		String dayString = "";
+		if (days != null && days.length > 0) {
+			for (int i = 0; i < days.length; i++) {
+				String j = String.valueOf(days[i]);
+				dayString += j + "_";
+			}
+		}
+		return dayString;
+	}
+
+	public static int[] String2Days(String dayString) {
+		int[] ints = null;
+		if (dayString != null && dayString.length() > 0) {
+			String[] strs = dayString.split("_");
+			if (strs != null && strs.length > 0) {
+				ints = new int[strs.length];
+				for (int i = 0; i < strs.length; i++) {
+					int j = Integer.parseInt(strs[i]);
+					ints[i] = j;
+				}
+			}
+		}
+		if (ints == null) {
+			ints = new int[0];
+		}
+		return ints;
 	}
 
 }
