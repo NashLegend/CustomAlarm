@@ -13,12 +13,13 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
 public class Alarm {
-	private String groupID;// 按理说只有weekly的能用上。不支持每月和每年同时设置几天……，除非是蓝翔校长，每月8号、18号、28号开学
+	private String groupID;// 按理说只有weekly的能用上。不支持每月和每年同时设置几天……
 	private String id = "";// id为UUID;这可能会导致有两个完全相同时间的闹钟，而系统把它们当作两个。需要在添加的时候进行检测
 	private GregorianCalendar alarmCalendar;// 响铃日期
 	private int[] days_of_some;// group里面的几天
@@ -54,7 +55,8 @@ public class Alarm {
 		setTag(bundle.getString(ALARM_TAG));
 		setType(bundle.getInt(ALARM_TYPE));
 		setId(bundle.getString(ALARM_ID));
-		setAlarmcalendar((GregorianCalendar) bundle.getSerializable(ALARM_CALENDAR));
+		setAlarmcalendar((GregorianCalendar) bundle
+				.getSerializable(ALARM_CALENDAR));
 	}
 
 	/**
@@ -69,6 +71,7 @@ public class Alarm {
 			intent.putExtra(ALARM_ID, id);
 			intent.putExtra(ALARM_GROUP_ID, groupID);
 			intent.setAction(ALARM_ACTION);
+			intent.setData(Uri.fromParts("alarm", "id", id));
 
 			switch (type) {
 			case ALARM_DAILY:
@@ -94,9 +97,9 @@ public class Alarm {
 			}
 		}
 	}
-	
+
 	public void cancel() {
-		//要修改先取消
+		// 要修改先取消
 	}
 
 	/**
@@ -118,13 +121,13 @@ public class Alarm {
 	 */
 	public void setOneTimeAlarm() {
 		if (alarmCalendar.getTimeInMillis() - System.currentTimeMillis() > 0) {
-			//最后一个参数必须是PendingIntent.FLAG_UPDATE_CURRENT，否则BroadcastReceiver将收不到参数。
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
+			// 最后一个参数必须是PendingIntent.FLAG_UPDATE_CURRENT，否则BroadcastReceiver将收不到参数。
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
+					0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager manager = (AlarmManager) mContext
 					.getSystemService(Context.ALARM_SERVICE);
-			manager.set(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(),
-					pendingIntent);
+			manager.set(AlarmManager.RTC_WAKEUP,
+					alarmCalendar.getTimeInMillis(), pendingIntent);
 		} else {
 			Toast.makeText(mContext, "Too early that alarm won't alarm",
 					Toast.LENGTH_SHORT).show();
@@ -136,7 +139,8 @@ public class Alarm {
 	 */
 	public void setDailyAlarm() {
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.set(Calendar.HOUR_OF_DAY, alarmCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.HOUR_OF_DAY,
+				alarmCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, alarmCalendar.get(Calendar.MINUTE));
 		calendar.set(Calendar.SECOND, alarmCalendar.get(Calendar.SECOND));
 		long mills = 0L;
@@ -148,10 +152,12 @@ public class Alarm {
 			mills = calendar.getTimeInMillis() + 86400000;
 		}
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
-		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000, pendingIntent);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000,
+				pendingIntent);
 	}
 
 	/**
@@ -159,28 +165,31 @@ public class Alarm {
 	 */
 	public void setWeeklyAlarm() {
 		// 一周可能有几天，一个AlarmManager不够用，使用几个AlarmManager然后采用setRepeating就行了
+		// intent必须不同，否则会被系统认为是同一个，结果是只有最后一个闹钟生效（第一个闹钟响之前设置的闹钟中）
+		// 如果仅仅“extras”的不同并不会导致intent对比起来不同，所以会导致合并成一个Alarm
+		// intent通过intent.filterEquals(intent2)来对比
+		// 只有action, data, type, class, 和categories都相同时才会认为是一个
+		// 有两个办法：一是建立data规则，通过设置不同的data判断
+		// 二是设置getBroadcast中第二个参数 （int requestCode）来区分。这个参数目前API中没有使用到
+		// Android URI
+		// 这里采用两个都使用的方法。所有的intent都进行了intent.setData(Uri.fromParts("alarm", "id", id));操作以区分开一般闹钟。
+		// 而在weekly闹钟里因为设置了多个闹钟，而一个intent又只能设置一个data，所以在week里为区分不同闹钟，将使用第二种方法。
+		// 将requestCode设置为day,足以分开不同的PendingIntent。以id区分外部，以requestCode区分内部
 		GregorianCalendar calendar = new GregorianCalendar();
-		//intent必须不同，否则会被系统认为是同一个，结果是只有最后一个闹钟生效（第一个闹钟响之前设置的闹钟中）
-		//如果仅仅“extras”的不同并不会导致intent对比起来不同，所以会导致合并成一个Alarm
-		//intent通过intent.filterEquals(intent2)来对比
-		//只有action, data, type, class, 和categories都相同时才会认为是一个
-		//TODO 有两个办法：一是建立data规则，通过设置不同的data判断
-		//TODO 二是设置getBroadcast中第二个参数 （int requestCode）来区分。这个参数目前API中没有使用到
-		//Android URI
 		for (int i = 0; i < days_of_some.length; i++) {
 			int day = days_of_some[i];
 			calendar.set(Calendar.DAY_OF_WEEK, day);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
+					day, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager manager = (AlarmManager) mContext
 					.getSystemService(Context.ALARM_SERVICE);
 			if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
-				manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-						86400000 * 7, pendingIntent);
+				manager.setRepeating(AlarmManager.RTC_WAKEUP,
+						calendar.getTimeInMillis(), 86400000 * 7, pendingIntent);
 			} else {
 				manager.setRepeating(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis() + 86400000 * 7, 86400000 * 7,
-						pendingIntent);
+						calendar.getTimeInMillis() + 86400000 * 7,
+						86400000 * 7, pendingIntent);
 			}
 		}
 	}
@@ -197,7 +206,8 @@ public class Alarm {
 		long timemills = 0L;
 		calendar.set(Calendar.DAY_OF_MONTH, day);
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		// 查检日期是否合法，不合法则表示本月没有这一天，day将肯定大于28，本次将不再设定此闹铃，将闹铃的设置推迟到下次BootReceiver接收到消息
@@ -210,7 +220,8 @@ public class Alarm {
 				calendar = getNextMonthCalendar(calendar);
 				if (isValidDate(calendar)) {
 					timemills = calendar.getTimeInMillis();
-					manager.set(AlarmManager.RTC_WAKEUP, timemills, pendingIntent);
+					manager.set(AlarmManager.RTC_WAKEUP, timemills,
+							pendingIntent);
 				}
 			}
 		}
@@ -223,14 +234,17 @@ public class Alarm {
 		// The number of days in every month is not always the same
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MONTH, alarmCalendar.get(Calendar.MONTH));
-		calendar.set(Calendar.DAY_OF_MONTH, alarmCalendar.get(Calendar.DAY_OF_MONTH));
-		calendar.set(Calendar.HOUR_OF_DAY, alarmCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.DAY_OF_MONTH,
+				alarmCalendar.get(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY,
+				alarmCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, alarmCalendar.get(Calendar.MINUTE));
 
 		// 在12月31号，闹钟为1月1号，则此if不成立，因为闹钟将发生在明年也就是明天，此时最好是设置上
 		// 设定为期一年的时间太长，一般手机都会关过几次机。如果很快就到下一年了，则只设置下一年的距今30天以内的。
 		// 反正每天都会定时检查一下闹钟
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
@@ -239,8 +253,8 @@ public class Alarm {
 		} else {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			if (calendar.getTimeInMillis() - System.currentTimeMillis() > 86400000 * 30) {
-				manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-						pendingIntent);
+				manager.set(AlarmManager.RTC_WAKEUP,
+						calendar.getTimeInMillis(), pendingIntent);
 			}
 		}
 	}
@@ -310,7 +324,8 @@ public class Alarm {
 	 * @param calendar
 	 * @return
 	 */
-	public static GregorianCalendar getNextMonthCalendar(GregorianCalendar calendar) {
+	public static GregorianCalendar getNextMonthCalendar(
+			GregorianCalendar calendar) {
 		if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			calendar.set(Calendar.MONTH, Calendar.JANUARY);
@@ -363,13 +378,14 @@ public class Alarm {
 	public static void startAlarmRestore(Context context) {
 		Intent intent = new Intent();
 		intent.setAction(Alarm.ALARM_ACTION);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
 		// manager.cancel(pendingIntent);//到底要不要先取消，按理说不要
 		// 应该是每天00：00检查一次
-		manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-				86400000, pendingIntent);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP,
+				System.currentTimeMillis(), 86400000, pendingIntent);
 	}
 
 	public static GregorianCalendar String2Calendar(String string) {
