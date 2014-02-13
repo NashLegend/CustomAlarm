@@ -41,7 +41,7 @@ public class AlarmHelper {
 		values.put(AlarmColumn.ALARM_GROUPID, alarm.getGroupID());
 
 		values.put(AlarmColumn.ALARM_CALENDAR,
-				Alarm.Calendar2String(alarm.getAlarmCalendar()));
+				Alarm.Calendar2String(alarm.getAudreyCalendar()));
 
 		values.put(AlarmColumn.ALARM_TYPE, String.valueOf(alarm.getType()));
 

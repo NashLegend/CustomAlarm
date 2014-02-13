@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class Alarm {
 	private String groupID;// 按理说只有weekly的能用上。不支持每月和每年同时设置几天……//完全用不上啊，可以考虑删除了
 	private String id = "";// id为UUID;这可能会导致有两个完全相同时间的闹钟，而系统把它们当作两个。需要在添加的时候进行检测
-	private GregorianCalendar alarmCalendar;// 响铃日期
+	private GregorianCalendar AudreyCalendar;// 响铃日期，格里高利日历，奥黛丽日历
 	private int[] days_of_some;// group里面的几天
 	private String tag;// example:birthday,festival or some what;
 	private int type;// ALARM_DAILY,ALARM_WEEKLY等等
@@ -60,7 +60,7 @@ public class Alarm {
 		setTag(bundle.getString(ALARM_TAG));
 		setType(bundle.getInt(ALARM_TYPE));
 		setId(bundle.getString(ALARM_ID));
-		setAlarmCalendar((GregorianCalendar) bundle
+		setAudreyCalendar((GregorianCalendar) bundle
 				.getSerializable(ALARM_CALENDAR));
 		setAvailable(bundle.getBoolean(ALARM_AVAILABLE));
 		setRemark(bundle.getString(ALARM_REMARK));
@@ -111,7 +111,7 @@ public class Alarm {
 	 * 运行闹钟
 	 */
 	private void setUp() {
-		if (alarmCalendar != null) {
+		if (AudreyCalendar != null) {
 			switch (type) {
 			case ALARM_DAILY:
 				setDailyAlarm();
@@ -180,14 +180,14 @@ public class Alarm {
 	 * 设置一次性闹钟
 	 */
 	private void setOneTimeAlarm() {
-		if (alarmCalendar.getTimeInMillis() - System.currentTimeMillis() > 0) {
+		if (AudreyCalendar.getTimeInMillis() - System.currentTimeMillis() > 0) {
 			// 最后一个参数必须是PendingIntent.FLAG_UPDATE_CURRENT，否则BroadcastReceiver将收不到参数。
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
 					0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager manager = (AlarmManager) mContext
 					.getSystemService(Context.ALARM_SERVICE);
 			manager.set(AlarmManager.RTC_WAKEUP,
-					alarmCalendar.getTimeInMillis(), pendingIntent);
+					AudreyCalendar.getTimeInMillis(), pendingIntent);
 		} else {
 			Toast.makeText(mContext, "Too early that alarm won't alarm",
 					Toast.LENGTH_SHORT).show();
@@ -200,9 +200,9 @@ public class Alarm {
 	private void setDailyAlarm() {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.HOUR_OF_DAY,
-				alarmCalendar.get(Calendar.HOUR_OF_DAY));
-		calendar.set(Calendar.MINUTE, alarmCalendar.get(Calendar.MINUTE));
-		calendar.set(Calendar.SECOND, alarmCalendar.get(Calendar.SECOND));
+				AudreyCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.MINUTE, AudreyCalendar.get(Calendar.MINUTE));
+		calendar.set(Calendar.SECOND, AudreyCalendar.get(Calendar.SECOND));
 		long mills = 0L;
 		if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
 			// Rings today
@@ -236,6 +236,7 @@ public class Alarm {
 		// id));操作以区分开一般闹钟。
 		// 而在weekly闹钟里因为设置了多个闹钟，而一个intent又只能设置一个data，所以在week里为区分不同闹钟，将使用第二种方法。
 		// 将requestCode设置为day,足以分开不同的PendingIntent。以id区分外部，以requestCode区分内部
+		// 同时必须在intent-filter里面添加<data android:scheme="alarm" />，否则data将被不予考虑
 		GregorianCalendar calendar = new GregorianCalendar();
 		for (int i = 0; i < days_of_some.length; i++) {
 			int day = days_of_some[i];
@@ -262,7 +263,7 @@ public class Alarm {
 		// 每个月长度不一样，所以不能用setRepeating，只能设置一个月的，然后隔一段时间再重新设置一次
 		GregorianCalendar calendar = new GregorianCalendar();
 
-		int day = alarmCalendar.get(Calendar.DAY_OF_MONTH);
+		int day = AudreyCalendar.get(Calendar.DAY_OF_MONTH);
 
 		long timemills = 0L;
 		calendar.set(Calendar.DAY_OF_MONTH, day);
@@ -294,12 +295,12 @@ public class Alarm {
 	private void setYearlyAlarm() {
 		// The number of days in every month is not always the same
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.set(Calendar.MONTH, alarmCalendar.get(Calendar.MONTH));
+		calendar.set(Calendar.MONTH, AudreyCalendar.get(Calendar.MONTH));
 		calendar.set(Calendar.DAY_OF_MONTH,
-				alarmCalendar.get(Calendar.DAY_OF_MONTH));
+				AudreyCalendar.get(Calendar.DAY_OF_MONTH));
 		calendar.set(Calendar.HOUR_OF_DAY,
-				alarmCalendar.get(Calendar.HOUR_OF_DAY));
-		calendar.set(Calendar.MINUTE, alarmCalendar.get(Calendar.MINUTE));
+				AudreyCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.MINUTE, AudreyCalendar.get(Calendar.MINUTE));
 
 		// 在12月31号，闹钟为1月1号，则此if不成立，因为闹钟将发生在明年也就是明天，此时最好是设置上
 		// 设定为期一年的时间太长，一般手机都会关过几次机。如果很快就到下一年了，则只设置下一年的距今30天以内的。
@@ -352,12 +353,12 @@ public class Alarm {
 		this.id = id;
 	}
 
-	public GregorianCalendar getAlarmCalendar() {
-		return alarmCalendar;
+	public GregorianCalendar getAudreyCalendar() {
+		return AudreyCalendar;
 	}
 
-	public void setAlarmCalendar(GregorianCalendar alarmcalendar) {
-		this.alarmCalendar = alarmcalendar;
+	public void setAudreyCalendar(GregorianCalendar alarmcalendar) {
+		this.AudreyCalendar = alarmcalendar;
 	}
 
 	public String getGroupID() {

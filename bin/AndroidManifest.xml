@@ -26,6 +26,8 @@
         <receiver android:name="com.example.customalarm.AlarmReceiver" >
             <intent-filter>
                 <action android:name="com.example.customalarm.alarm" />
+
+                <data android:scheme="alarm" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.example.customalarm.BootReceiver" >
