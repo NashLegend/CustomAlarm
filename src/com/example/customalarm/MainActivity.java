@@ -1,19 +1,48 @@
 package com.example.customalarm;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
 import android.os.Bundle;
-import android.app.Activity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
+
+	SlidingMenu menu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Alarm.startAlarmRestore(getApplicationContext());
+//		Alarm.startAlarmRestore(getApplicationContext());
+		initSlidingMenu();
 	}
 
+	private void initSlidingMenu() {
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.content, new MainContent()).commit();
+		menu = new SlidingMenu(this);
+		menu.setMode(SlidingMenu.LEFT_RIGHT);
+		menu.setBehindOffset(180);// 
 
+		menu.setShadowWidth(20);
+		menu.setShadowDrawable(R.drawable.shadow);
+		menu.setSecondaryShadowDrawable(R.drawable.secondaryshadow);
+		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+
+		menu.setMenu(R.layout.menu_left);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.LeftMenu, new LeftMenu()).commit();
+		menu.setSecondaryMenu(R.layout.menu_right);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.RightMenu, new RightMenu()).commit();
+	}
+	
+	public void switchContent(Fragment fragment) {
+		getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
