@@ -37,6 +37,18 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int behindWidth=0x7f010004;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int btnimg=0x7f010011;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int btntext=0x7f01000e;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -56,7 +68,7 @@ containing a value of this type.
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int img=0x7f01000f;
+        public static final int img=0x7f010010;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -101,7 +113,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int text=0x7f01000e;
+        public static final int text=0x7f01000f;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -152,40 +164,47 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class id {
         public static final int LeftMenu=0x7f040012;
-        public static final int MainContent=0x7f040011;
+        public static final int MainContent=0x7f040009;
         public static final int RightMenu=0x7f040013;
         public static final int action_settings=0x7f040015;
-        public static final int alarm_all=0x7f04000c;
-        public static final int alarm_festival=0x7f04000b;
-        public static final int alarm_my=0x7f040007;
-        public static final int alarm_select=0x7f040009;
-        public static final int alarm_set=0x7f040008;
-        public static final int alarm_work=0x7f04000a;
-        public static final int btnInTab=0x7f04000e;
+        public static final int alarm_all=0x7f040010;
+        public static final int alarm_festival=0x7f04000f;
+        public static final int alarm_my=0x7f04000b;
+        public static final int alarm_select=0x7f04000d;
+        public static final int alarm_set=0x7f04000c;
+        public static final int alarm_work=0x7f04000e;
+        public static final int btnInTab=0x7f040006;
         public static final int content=0x7f040005;
         public static final int fullscreen=0x7f040003;
-        public static final int imgInTab=0x7f040010;
+        public static final int imgInTab=0x7f040008;
         public static final int left=0x7f040000;
         public static final int margin=0x7f040002;
-        public static final int pager=0x7f04000d;
+        public static final int pager=0x7f040011;
         public static final int right=0x7f040001;
         public static final int selected_view=0x7f040004;
         public static final int slidingmenumain=0x7f040014;
-        public static final int tabs=0x7f040006;
-        public static final int txtInTab=0x7f04000f;
+        public static final int tabs=0x7f04000a;
+        public static final int txtInTab=0x7f040007;
     }
     public static final class layout {
         public static final int activity_alarm_detail=0x7f030000;
         public static final int activity_main=0x7f030001;
-        public static final int button_tab=0x7f030002;
-        public static final int content_main=0x7f030003;
-        public static final int menu_left=0x7f030004;
-        public static final int menu_right=0x7f030005;
-        public static final int slidingmenumain=0x7f030006;
+        public static final int activity_recommended_alarm_detail=0x7f030002;
+        public static final int button_tab=0x7f030003;
+        public static final int content_main=0x7f030004;
+        public static final int fragment_festival_alarm=0x7f030005;
+        public static final int fragment_my_alarm=0x7f030006;
+        public static final int fragment_selected_alarm=0x7f030007;
+        public static final int fragment_set_alarm=0x7f030008;
+        public static final int fragment_work_alarm=0x7f030009;
+        public static final int menu_left=0x7f03000a;
+        public static final int menu_right=0x7f03000b;
+        public static final int slidingmenumain=0x7f03000c;
     }
     public static final class menu {
         public static final int alarm_detail=0x7f080000;
         public static final int main=0x7f080001;
+        public static final int recommended_alarm_detail=0x7f080002;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
@@ -194,9 +213,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int festival_alarm=0x7f060008;
         public static final int hello_world=0x7f060002;
         public static final int my_alarm=0x7f060004;
-        public static final int selection_alarm=0x7f060006;
+        public static final int selected_alarm=0x7f060006;
         public static final int set_alarm=0x7f060005;
         public static final int title_activity_alarm_detail=0x7f060003;
+        public static final int title_activity_recommended_alarm_detail=0x7f06000a;
         public static final int work_alarm=0x7f060007;
     }
     public static final class style {
@@ -471,15 +491,43 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #tabButtonView_btnimg com.example.customalarm:btnimg}</code></td><td></td></tr>
+           <tr><td><code>{@link #tabButtonView_btntext com.example.customalarm:btntext}</code></td><td></td></tr>
            <tr><td><code>{@link #tabButtonView_img com.example.customalarm:img}</code></td><td></td></tr>
            <tr><td><code>{@link #tabButtonView_text com.example.customalarm:text}</code></td><td></td></tr>
            </table>
+           @see #tabButtonView_btnimg
+           @see #tabButtonView_btntext
            @see #tabButtonView_img
            @see #tabButtonView_text
          */
         public static final int[] tabButtonView = {
-            0x7f01000e, 0x7f01000f
+            0x7f01000e, 0x7f01000f, 0x7f010010, 0x7f010011
         };
+        /**
+          <p>This symbol is the offset where the {@link com.example.customalarm.R.attr#btnimg}
+          attribute's value can be found in the {@link #tabButtonView} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name com.example.customalarm:btnimg
+        */
+        public static final int tabButtonView_btnimg = 3;
+        /**
+          <p>This symbol is the offset where the {@link com.example.customalarm.R.attr#btntext}
+          attribute's value can be found in the {@link #tabButtonView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.example.customalarm:btntext
+        */
+        public static final int tabButtonView_btntext = 0;
         /**
           <p>This symbol is the offset where the {@link com.example.customalarm.R.attr#img}
           attribute's value can be found in the {@link #tabButtonView} array.
@@ -489,7 +537,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.example.customalarm:img
         */
-        public static final int tabButtonView_img = 1;
+        public static final int tabButtonView_img = 2;
         /**
           <p>This symbol is the offset where the {@link com.example.customalarm.R.attr#text}
           attribute's value can be found in the {@link #tabButtonView} array.
@@ -503,6 +551,6 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.example.customalarm:text
         */
-        public static final int tabButtonView_text = 0;
+        public static final int tabButtonView_text = 1;
     };
 }

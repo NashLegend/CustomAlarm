@@ -1,4 +1,7 @@
-package com.example.customalarm;
+package com.example.customalarm.fragment;
+
+import com.example.customalarm.R;
+import com.example.customalarm.R.layout;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="tabButtonView">
-        <attr name="text" format="string"/>
-        <attr name="img" format="reference"/>
+        <attr name="btntext" format="string" />
+        <attr name="text" format="string" />
+        <attr name="img" format="reference" />
+        <attr name="btnimg" format="reference" />
     </declare-styleable>
+
 </resources>

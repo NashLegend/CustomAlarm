@@ -2,7 +2,7 @@ package com.example.customalarm.db;
 
 import java.util.ArrayList;
 
-import com.example.customalarm.Alarm;
+import com.example.customalarm.core.Alarm;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

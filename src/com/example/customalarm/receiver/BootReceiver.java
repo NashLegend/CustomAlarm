@@ -1,6 +1,8 @@
-package com.example.customalarm;
+package com.example.customalarm.receiver;
 
 import java.util.ArrayList;
+
+import com.example.customalarm.core.Alarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

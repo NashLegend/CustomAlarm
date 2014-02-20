@@ -1,13 +1,20 @@
 package com.example.customalarm;
 
+import com.example.customalarm.core.Alarm;
+import com.example.customalarm.fragment.LeftMenu;
+import com.example.customalarm.fragment.MainContent;
+import com.example.customalarm.fragment.RightMenu;
+import com.example.customalarm.util.DisplayTools;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 
 public class MainActivity extends FragmentActivity implements OnClickListener {
 
@@ -16,6 +23,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		Alarm.startAlarmRestore(getApplicationContext());
 		initSlidingMenu();
@@ -26,7 +34,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 				.replace(R.id.content, new MainContent()).commit();
 		menu = new SlidingMenu(this);
 		menu.setMode(SlidingMenu.LEFT_RIGHT);
-		menu.setBehindOffset(UtilTools.dip2px(64, this));//
+		menu.setBehindOffset(DisplayTools.dip2px(64, this));//
 
 		menu.setShadowWidth(20);
 		menu.setShadowDrawable(R.drawable.shadow);
@@ -45,6 +53,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	public void switchContent(Fragment fragment) {
 		getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment)
 				.commit();
+	}
+	
+	public void showLeft() {
+		if (menu!=null) {
+			menu.showMenu();
+		}
+	}
+	
+	public void showRight() {
+		if (menu!=null) {
+			menu.showSecondaryMenu();
+		}
 	}
 
 	@Override

@@ -1,4 +1,9 @@
-package com.example.customalarm;
+package com.example.customalarm.ui;
+
+import com.example.customalarm.R;
+import com.example.customalarm.R.id;
+import com.example.customalarm.R.layout;
+import com.example.customalarm.R.styleable;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -6,19 +11,25 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+/**
+ * @author Pan
+ *
+ */
 public class TabButton extends LinearLayout {
-	Button button;
-	TextView textView;
-	ImageView imageView;
+	private Button button;
+	private TextView textView;
+	private ImageView imageView;
 
 	public TabButton(Context context) {
 		super(context);
-		// TODO 自动生成的构造函数存根
 	}
 
 	public TabButton(Context context, AttributeSet attrs) {
@@ -27,15 +38,27 @@ public class TabButton extends LinearLayout {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.button_tab, this);
 		button = (Button) findViewById(R.id.btnInTab);
+		button.setClickable(false);
 		textView = (TextView) findViewById(R.id.txtInTab);
 		imageView = (ImageView) findViewById(R.id.imgInTab);
+
 		TypedArray array = context.obtainStyledAttributes(attrs,
 				R.styleable.tabButtonView);
 		String txt = array.getString(R.styleable.tabButtonView_text);
-		int resId = array.getResourceId(R.styleable.tabButtonView_img, -1);
+		String btntext = array.getString(R.styleable.tabButtonView_btntext);
+		int imgResId = array.getResourceId(R.styleable.tabButtonView_img, -1);
+		int btnResId = array
+				.getResourceId(R.styleable.tabButtonView_btnimg, -1);
+
 		textView.setText(txt);
-		if (resId != -1) {
-			imageView.setImageResource(resId);
+		if (btnResId != -1) {
+			button.setBackgroundResource(btnResId);
+		} else if (btntext != null) {
+			button.setText(btntext);
+		}
+
+		if (imgResId != -1) {
+			imageView.setImageResource(imgResId);
 		}
 		array.recycle();
 	}

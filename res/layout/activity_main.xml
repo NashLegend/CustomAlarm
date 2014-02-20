@@ -1,65 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tab="http://schemas.android.com/apk/res/com.example.customalarm"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <LinearLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:orientation="horizontal" >
-
-        <com.example.customalarm.TabButton
-            android:id="@+id/alarm_my"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tab:text="@string/my_alarm" />
-
-        <com.example.customalarm.TabButton
-            android:id="@+id/alarm_set"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tab:text="@string/set_alarm" />
-
-        <com.example.customalarm.TabButton
-            android:id="@+id/alarm_select"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tab:text="@string/selection_alarm" />
-
-        <com.example.customalarm.TabButton
-            android:id="@+id/alarm_work"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tab:text="@string/work_alarm" />
-
-        <com.example.customalarm.TabButton
-            android:id="@+id/alarm_festival"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tab:text="@string/festival_alarm" />
-
-        <com.example.customalarm.TabButton
-            android:id="@+id/alarm_all"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tab:text="@string/all_alarm" />
-    </LinearLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:background="#fff000"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</LinearLayout>
+</LinearLayout>

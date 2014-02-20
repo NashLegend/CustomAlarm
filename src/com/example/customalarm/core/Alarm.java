@@ -1,4 +1,4 @@
-package com.example.customalarm;
+package com.example.customalarm.core;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,10 +20,10 @@ import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
 public class Alarm {
-	private String groupID;// 按理说只有weekly的能用上。不支持每月和每年同时设置几天……//完全用不上啊，可以考虑删除了
+	private String groupID;// 天周月年里面应该都有才对
 	private String id = "";// id为UUID;这可能会导致有两个完全相同时间的闹钟，而系统把它们当作两个。需要在添加的时候进行检测
 	private GregorianCalendar AudreyCalendar;// 响铃日期，格里高利日历，奥黛丽日历
-	private int[] days_of_some;// group里面的几天
+	private int[] days_of_some;// group里面的几天，天周月年里面应该都有才对
 	private String tag;// example:birthday,festival or some what;
 	private int type;// ALARM_DAILY,ALARM_WEEKLY等等
 	private boolean cancelable = true;// 如果为true，则不可取消直到响铃完毕……

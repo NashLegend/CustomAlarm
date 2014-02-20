@@ -23,14 +23,14 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.example.customalarm.AlarmReceiver" >
+        <receiver android:name="com.example.customalarm.receiver.AlarmReceiver" >
             <intent-filter>
                 <action android:name="com.example.customalarm.alarm" />
 
                 <data android:scheme="alarm" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.example.customalarm.BootReceiver" >
+        <receiver android:name="com.example.customalarm.receiver.BootReceiver" >
             <intent-filter>
                 <action android:name="com.example.customalarm.reset" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -40,6 +40,10 @@
         <activity
             android:name="com.example.customalarm.AlarmDetail"
             android:label="@string/title_activity_alarm_detail" >
+        </activity>
+        <activity
+            android:name="com.example.customalarm.RecommendedAlarmDetail"
+            android:label="@string/title_activity_recommended_alarm_detail" >
         </activity>
     </application>
 

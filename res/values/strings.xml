@@ -7,9 +7,10 @@
     <string name="title_activity_alarm_detail">AlarmDetail</string>
     <string name="my_alarm">my</string>
     <string name="set_alarm">set</string>
-    <string name="selection_alarm">slct</string>
-    <string name="work_alarm">work</string>
+    <string name="selected_alarm">slct</string>
+    <string name="work_alarm">wrk</string>
     <string name="festival_alarm">fstv</string>
     <string name="all_alarm">all</string>
+    <string name="title_activity_recommended_alarm_detail">RecommendedAlarmDetail</string>
 
 </resources>
