@@ -53,6 +53,10 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int fadeEnabled=0x7f01000a;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int img=0x7f01000f;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -90,6 +94,14 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int shadowWidth=0x7f010009;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int text=0x7f01000e;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -130,6 +142,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
          */
         public static final int activity_horizontal_margin=0x7f050000;
         public static final int activity_vertical_margin=0x7f050001;
+        public static final int menu_left_margin=0x7f050002;
+        public static final int menu_right_margin=0x7f050003;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
@@ -137,25 +151,37 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int shadow=0x7f020002;
     }
     public static final class id {
-        public static final int LeftMenu=0x7f040007;
-        public static final int MainContent=0x7f040006;
-        public static final int RightMenu=0x7f040008;
-        public static final int action_settings=0x7f04000a;
+        public static final int LeftMenu=0x7f040012;
+        public static final int MainContent=0x7f040011;
+        public static final int RightMenu=0x7f040013;
+        public static final int action_settings=0x7f040015;
+        public static final int alarm_all=0x7f04000c;
+        public static final int alarm_festival=0x7f04000b;
+        public static final int alarm_my=0x7f040007;
+        public static final int alarm_select=0x7f040009;
+        public static final int alarm_set=0x7f040008;
+        public static final int alarm_work=0x7f04000a;
+        public static final int btnInTab=0x7f04000e;
         public static final int content=0x7f040005;
         public static final int fullscreen=0x7f040003;
+        public static final int imgInTab=0x7f040010;
         public static final int left=0x7f040000;
         public static final int margin=0x7f040002;
+        public static final int pager=0x7f04000d;
         public static final int right=0x7f040001;
         public static final int selected_view=0x7f040004;
-        public static final int slidingmenumain=0x7f040009;
+        public static final int slidingmenumain=0x7f040014;
+        public static final int tabs=0x7f040006;
+        public static final int txtInTab=0x7f04000f;
     }
     public static final class layout {
         public static final int activity_alarm_detail=0x7f030000;
         public static final int activity_main=0x7f030001;
-        public static final int content_main=0x7f030002;
-        public static final int menu_left=0x7f030003;
-        public static final int menu_right=0x7f030004;
-        public static final int slidingmenumain=0x7f030005;
+        public static final int button_tab=0x7f030002;
+        public static final int content_main=0x7f030003;
+        public static final int menu_left=0x7f030004;
+        public static final int menu_right=0x7f030005;
+        public static final int slidingmenumain=0x7f030006;
     }
     public static final class menu {
         public static final int alarm_detail=0x7f080000;
@@ -163,9 +189,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
+        public static final int all_alarm=0x7f060009;
         public static final int app_name=0x7f060000;
+        public static final int festival_alarm=0x7f060008;
         public static final int hello_world=0x7f060002;
+        public static final int my_alarm=0x7f060004;
+        public static final int selection_alarm=0x7f060006;
+        public static final int set_alarm=0x7f060005;
         public static final int title_activity_alarm_detail=0x7f060003;
+        public static final int work_alarm=0x7f060007;
     }
     public static final class style {
         /** 
@@ -433,5 +465,44 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
           @attr name com.example.customalarm:viewBehind
         */
         public static final int SlidingMenu_viewBehind = 2;
+        /** Attributes that can be used with a tabButtonView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #tabButtonView_img com.example.customalarm:img}</code></td><td></td></tr>
+           <tr><td><code>{@link #tabButtonView_text com.example.customalarm:text}</code></td><td></td></tr>
+           </table>
+           @see #tabButtonView_img
+           @see #tabButtonView_text
+         */
+        public static final int[] tabButtonView = {
+            0x7f01000e, 0x7f01000f
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.example.customalarm.R.attr#img}
+          attribute's value can be found in the {@link #tabButtonView} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name com.example.customalarm:img
+        */
+        public static final int tabButtonView_img = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.example.customalarm.R.attr#text}
+          attribute's value can be found in the {@link #tabButtonView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.example.customalarm:text
+        */
+        public static final int tabButtonView_text = 0;
     };
 }
