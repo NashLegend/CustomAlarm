@@ -29,6 +29,7 @@ public class Alarm {
 	private boolean cancelable = true;// 如果为true，则不可取消直到响铃完毕……
 	private boolean available = true;// 是否关闭
 	private String remark = null;// 备注
+	private String timeDescription="";//对于时间的描述。example:每周一二三
 	private Context mContext;
 
 	private Intent intent;
@@ -548,6 +549,14 @@ public class Alarm {
 			ints = new int[0];
 		}
 		return ints;
+	}
+
+	public String getTimeDescription() {
+		return timeDescription;
+	}
+
+	public void setTimeDescription(String timeDescription) {
+		this.timeDescription = timeDescription;
 	}
 
 }

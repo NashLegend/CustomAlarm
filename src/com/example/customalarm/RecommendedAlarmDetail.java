@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
+/**
+ * @author NashLegend
+ * readonly
+ */
 public class RecommendedAlarmDetail extends Activity {
 
 	@Override

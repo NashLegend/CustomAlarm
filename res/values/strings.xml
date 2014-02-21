@@ -12,5 +12,10 @@
     <string name="festival_alarm">fstv</string>
     <string name="all_alarm">all</string>
     <string name="title_activity_recommended_alarm_detail">RecommendedAlarmDetail</string>
+    
+    
+    <string name="default_alarm_tag">tag</string>
+    <string name="default_alarm_remark">remark</string>
+    <string name="default_alarm_time">description</string>
 
 </resources>
