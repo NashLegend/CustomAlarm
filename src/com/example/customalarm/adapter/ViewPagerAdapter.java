@@ -2,11 +2,10 @@ package com.example.customalarm.adapter;
 
 import java.util.ArrayList;
 
-import com.example.customalarm.fragment.FestivalAlarmFragment;
 import com.example.customalarm.fragment.MyAlarmFragment;
 import com.example.customalarm.fragment.SelectedAlarmFragment;
 import com.example.customalarm.fragment.SetAlarmFragment;
-import com.example.customalarm.fragment.WorkAlarmFragment;
+import com.example.customalarm.fragment.RecommendedAlarmFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,8 +21,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 		list.add(new MyAlarmFragment());
 		list.add(new SetAlarmFragment());
 		list.add(new SelectedAlarmFragment());
-		list.add(new WorkAlarmFragment());
-		list.add(new FestivalAlarmFragment());
+		list.add(new RecommendedAlarmFragment());
 	}
 
 	@Override

@@ -45,18 +45,19 @@ public class AlarmHelper {
 
 		values.put(AlarmColumn.ALARM_TYPE, String.valueOf(alarm.getType()));
 
-		values.put(AlarmColumn.ALARM_CANCELABLE, alarm.isCancelable() ? "true"
-				: "false");
+		values.put(AlarmColumn.ALARM_CANCELABLE, alarm.isCancelable() ? "true" : "false");
 
 		values.put(AlarmColumn.ALARM_TAG, alarm.getTag());
 
-		values.put(AlarmColumn.ALARM_DAYS,
-				Alarm.Days2String(alarm.getDays_of_some()));
+		values.put(AlarmColumn.ALARM_DAYS, Alarm.Days2String(alarm.getDays_of_some()));
 
-		values.put(AlarmColumn.ALARM_AVAILABLE, alarm.isAvailable() ? "true"
-				: "false");
+		values.put(AlarmColumn.ALARM_AVAILABLE, alarm.isAvailable() ? "true" : "false");
 
 		values.put(AlarmColumn.ALARM_REMARK, alarm.getRemark());
+
+		values.put(AlarmColumn.ALARM_IMAGE, alarm.getImgId());
+
+		values.put(AlarmColumn.ALARM_GROUPNAME, alarm.getGroupName());
 
 		long res = database.insert(AlarmDBHelper.TABLE, null, values);
 		close();
@@ -67,11 +68,10 @@ public class AlarmHelper {
 		open();
 		ArrayList<Alarm> list = new ArrayList<Alarm>();
 		String orderBy = AlarmColumn._ID + " DESC";
-		Cursor cursor = database.query(AlarmDBHelper.TABLE,
-				AlarmColumn.PROJECTION, null, null, null, null, orderBy);
+		Cursor cursor = database.query(AlarmDBHelper.TABLE, AlarmColumn.PROJECTION, null,
+				null, null, null, orderBy);
 		if (cursor != null && cursor.getCount() > 0) {
-			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-					.moveToNext()) {
+			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 				Bundle bundle = new Bundle();
 
 				// ID
@@ -88,31 +88,35 @@ public class AlarmHelper {
 
 				// 可取消
 				bundle.putBoolean(Alarm.ALARM_CANCELABLE, "true".equals(cursor
-						.getString(AlarmColumn.ALARM_CANCELABLE_COLUMN)) ? true
-						: false);
+						.getString(AlarmColumn.ALARM_CANCELABLE_COLUMN)) ? true : false);
 
 				// 标签
 				bundle.putString(Alarm.ALARM_TAG,
 						cursor.getString(AlarmColumn.ALARM_TAG_COLUMN));
 
 				// 日期
-				bundle.putSerializable(Alarm.ALARM_CALENDAR, Alarm
-						.String2Calendar(cursor
-								.getString(AlarmColumn.ALARM_CALENDAR_COLUMN)));
+				bundle.putSerializable(Alarm.ALARM_CALENDAR, Alarm.String2Calendar(cursor
+						.getString(AlarmColumn.ALARM_CALENDAR_COLUMN)));
 
 				// days_of_some
-				bundle.putIntArray(Alarm.ALARM_DAYS_OF_SOME, Alarm
-						.String2Days(cursor
-								.getString(AlarmColumn.ALARM_DAYS_COLUMN)));
-				
+				bundle.putIntArray(Alarm.ALARM_DAYS_OF_SOME, Alarm.String2Days(cursor
+						.getString(AlarmColumn.ALARM_DAYS_COLUMN)));
+
 				// 可用
 				bundle.putBoolean(Alarm.ALARM_AVAILABLE, "true".equals(cursor
-						.getString(AlarmColumn.ALARM_AVAILABLE_COLUMN)) ? true
-						: false);
+						.getString(AlarmColumn.ALARM_AVAILABLE_COLUMN)) ? true : false);
 
 				// 备注
 				bundle.putString(Alarm.ALARM_REMARK,
 						cursor.getString(AlarmColumn.ALARM_REMARK_COLUMN));
+				
+				// 图片
+				bundle.putString(Alarm.ALARM_IMAGE,
+						cursor.getString(AlarmColumn.ALARM_IMAGE_COLUMN));
+				
+				// 组名
+				bundle.putString(Alarm.ALARM_GROUP_NAME,
+						cursor.getString(AlarmColumn.ALARM_GROUPNAME_COLUMN));
 
 				Alarm alarm = new Alarm(context, bundle);
 				list.add(alarm);
@@ -132,16 +136,16 @@ public class AlarmHelper {
 		values.put(AlarmColumn.ALARM_DAYS, alarm.getGroupID());
 		values.put(AlarmColumn.ALARM_AVAILABLE, alarm.isAvailable());
 		values.put(AlarmColumn.ALARM_REMARK, alarm.getRemark());
-		boolean okay = database.update(AlarmDBHelper.TABLE, values,
-				AlarmColumn.ALARM_ID + " = " + alarm.getId(), null) > 0;
+		boolean okay = database.update(AlarmDBHelper.TABLE, values, AlarmColumn.ALARM_ID
+				+ " = " + alarm.getId(), null) > 0;
 		close();
 		return okay;
 	}
 
 	public boolean delete(Alarm alarm) {
 		open();
-		boolean okay = database.delete(AlarmDBHelper.TABLE,
-				AlarmColumn.ALARM_ID + " = " + alarm.getId(), null) > 0;
+		boolean okay = database.delete(AlarmDBHelper.TABLE, AlarmColumn.ALARM_ID + " = "
+				+ alarm.getId(), null) > 0;
 		close();
 		return okay;
 	}

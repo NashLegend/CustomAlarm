@@ -203,19 +203,18 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_recommended_alarm_detail=0x7f030002;
         public static final int button_tab=0x7f030003;
         public static final int content_main=0x7f030004;
-        public static final int fragment_festival_alarm=0x7f030005;
-        public static final int fragment_my_alarm=0x7f030006;
+        public static final int fragment_my_alarm=0x7f030005;
+        public static final int fragment_recommended_alarm=0x7f030006;
         public static final int fragment_selected_alarm=0x7f030007;
         public static final int fragment_set_alarm=0x7f030008;
-        public static final int fragment_work_alarm=0x7f030009;
-        public static final int item_alarm_type=0x7f03000a;
-        public static final int item_header_recommended_alarm=0x7f03000b;
-        public static final int item_my_alarm=0x7f03000c;
-        public static final int item_recommended_alarm=0x7f03000d;
-        public static final int item_selected_alarm=0x7f03000e;
-        public static final int menu_left=0x7f03000f;
-        public static final int menu_right=0x7f030010;
-        public static final int slidingmenumain=0x7f030011;
+        public static final int item_alarm_type=0x7f030009;
+        public static final int item_header_recommended_alarm=0x7f03000a;
+        public static final int item_my_alarm=0x7f03000b;
+        public static final int item_recommended_alarm=0x7f03000c;
+        public static final int item_selected_alarm=0x7f03000d;
+        public static final int menu_left=0x7f03000e;
+        public static final int menu_right=0x7f03000f;
+        public static final int slidingmenumain=0x7f030010;
     }
     public static final class menu {
         public static final int alarm_detail=0x7f080000;

@@ -18,6 +18,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
+/**
+ * @author NashLegend 对于内置的闹铃，则存放在另一个数据库中…… 暂时不从网络获取……
+ */
 @SuppressLint("SimpleDateFormat")
 public class Alarm {
 	private String groupID;// 天周月年里面应该都有才对
@@ -29,7 +32,11 @@ public class Alarm {
 	private boolean cancelable = true;// 如果为true，则不可取消直到响铃完毕……
 	private boolean available = true;// 是否关闭
 	private String remark = null;// 备注
-	private String timeDescription="";//对于时间的描述。example:每周一二三
+	private String imgId = "";// 或者string
+								// 应该以什么方式存储图片。有的图片内置，有的联网获取。（imgId可以转成int则取id，否则联网获取）
+	private String groupName = "";// 闹铃分组名
+	// private String timeDescription = "";//
+	// 对于时间的描述。example:每周一二三/有可能会随着时间变化，所以用不着，一个getTimeDescription足矣
 	private Context mContext;
 
 	private Intent intent;
@@ -50,22 +57,27 @@ public class Alarm {
 	public static final String ALARM_DAYS_OF_SOME = "ALARM_DAYS_OF_SOME";
 	public static final String ALARM_AVAILABLE = "ALARM_AVAILABLE";
 	public static final String ALARM_REMARK = "ALARM_REMARK";
+	public static final String ALARM_IMAGE = "ALARM_IMAGE";
+	public static final String ALARM_GROUP_NAME = "ALARM_GROUP_NAME";
 
 	public static final String ALARM_ACTION = "com.example.customalarm.alarm";
 	public static final String RESET_ACTION = "com.example.customalarm.reset";
 
 	public Alarm(Context context, Bundle bundle) {
+		mContext = context;
 		setDays_of_some(bundle.getIntArray(ALARM_DAYS_OF_SOME));
 		setGroupID(bundle.getString(ALARM_GROUP_ID));
 		setCancelable(bundle.getBoolean(ALARM_CANCELABLE));
 		setTag(bundle.getString(ALARM_TAG));
 		setType(bundle.getInt(ALARM_TYPE));
 		setId(bundle.getString(ALARM_ID));
-		setAudreyCalendar((GregorianCalendar) bundle
-				.getSerializable(ALARM_CALENDAR));
+		setAudreyCalendar((GregorianCalendar) bundle.getSerializable(ALARM_CALENDAR));
 		setAvailable(bundle.getBoolean(ALARM_AVAILABLE));
 		setRemark(bundle.getString(ALARM_REMARK));
-		activate();
+		setImgId(bundle.getString(ALARM_IMAGE));
+		setGroupName(bundle.getString(ALARM_GROUP_NAME));
+		// 初始化不会打开闹铃
+		// activate();
 	}
 
 	/**
@@ -79,32 +91,35 @@ public class Alarm {
 		intent.putExtra(ALARM_ID, id);
 		intent.putExtra(ALARM_GROUP_ID, groupID);
 		intent.putExtra(ALARM_REMARK, remark);
+		intent.putExtra(ALARM_IMAGE, imgId);
+		intent.putExtra(ALARM_GROUP_NAME, groupName);
 		intent.setAction(ALARM_ACTION);
 		intent.setData(Uri.fromParts("alarm", "id", id));
 	}
-	
+
 	/**
-	 * 如果对闹铃进行了初始化或者修改，那么就一定要调用activate()重新设置一次闹铃
-	 * 不进行数据库操作，数据库的修改操作在外部进行。
+	 * 如果对闹铃进行了初始化或者修改，那么就一定要调用activate()重新设置一次闹铃 不进行数据库操作，数据库的修改操作在外部进行。
 	 * 当然只是设置，能不能打开还要看available
 	 */
 	public void activate() {
 		setIntent();
 		if (available) {
+			// TODO 这时候应该有一些其他操作，比如以前没有这个闹钟的时候，要在闹钟列表中添加。如果以前有，则激活。
+			// 不过这些方法应该写在其他地方而这不是这里
 			setUp();
-		}else {
+		} else {
 			cancel();
 		}
 	}
-	
+
 	/**
 	 * 保存对闹钟的修改，并运行activate
 	 */
 	public void edit() {
 		if (Alarm.editAlarmInDB(this)) {
 			activate();
-		}else {
-			//存储失败，要趁着intent没有修改，从intent中恢复……
+		} else {
+			// 存储失败，要趁着intent没有修改，从intent中恢复……
 		}
 	}
 
@@ -139,15 +154,14 @@ public class Alarm {
 	}
 
 	/**
-	 * 取消闹钟，仍然保存在数据库里面，只是AlarmManager不再工作
-	 * 只做Alarm工作，不处理数据库
+	 * 取消闹钟，仍然保存在数据库里面，只是AlarmManager不再工作 只做Alarm工作，不处理数据库
 	 */
 	public void cancel() {
 		setIntent();
 		PendingIntent pendingIntent;
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
-		//如果days_of_some不为空，则为一个闹铃组，要取消一批。否则仅仅取消一个足矣
+		// 如果days_of_some不为空，则为一个闹铃组，要取消一批。否则仅仅取消一个足矣
 		if (days_of_some != null && days_of_some.length > 0) {
 			for (int j = 0; j < days_of_some.length; j++) {
 				int k = days_of_some[j];
@@ -169,7 +183,7 @@ public class Alarm {
 		cancel();
 		deleteFromDB(this);
 	}
-	
+
 	/**
 	 * 设置倒计时闹钟 倒计时本质上就是一次性闹钟
 	 */
@@ -183,12 +197,12 @@ public class Alarm {
 	private void setOneTimeAlarm() {
 		if (AudreyCalendar.getTimeInMillis() - System.currentTimeMillis() > 0) {
 			// 最后一个参数必须是PendingIntent.FLAG_UPDATE_CURRENT，否则BroadcastReceiver将收不到参数。
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
-					0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager manager = (AlarmManager) mContext
 					.getSystemService(Context.ALARM_SERVICE);
-			manager.set(AlarmManager.RTC_WAKEUP,
-					AudreyCalendar.getTimeInMillis(), pendingIntent);
+			manager.set(AlarmManager.RTC_WAKEUP, AudreyCalendar.getTimeInMillis(),
+					pendingIntent);
 		} else {
 			Toast.makeText(mContext, "Too early that alarm won't alarm",
 					Toast.LENGTH_SHORT).show();
@@ -200,8 +214,7 @@ public class Alarm {
 	 */
 	private void setDailyAlarm() {
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.set(Calendar.HOUR_OF_DAY,
-				AudreyCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.HOUR_OF_DAY, AudreyCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, AudreyCalendar.get(Calendar.MINUTE));
 		calendar.set(Calendar.SECOND, AudreyCalendar.get(Calendar.SECOND));
 		long mills = 0L;
@@ -213,12 +226,11 @@ public class Alarm {
 			mills = calendar.getTimeInMillis() + 86400000;
 		}
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
-		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000,
-				pendingIntent);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000, pendingIntent);
 	}
 
 	/**
@@ -242,17 +254,17 @@ public class Alarm {
 		for (int i = 0; i < days_of_some.length; i++) {
 			int day = days_of_some[i];
 			calendar.set(Calendar.DAY_OF_WEEK, day);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
-					day, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, day,
+					intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			AlarmManager manager = (AlarmManager) mContext
 					.getSystemService(Context.ALARM_SERVICE);
 			if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
-				manager.setRepeating(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis(), 86400000 * 7, pendingIntent);
+				manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+						86400000 * 7, pendingIntent);
 			} else {
 				manager.setRepeating(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis() + 86400000 * 7,
-						86400000 * 7, pendingIntent);
+						calendar.getTimeInMillis() + 86400000 * 7, 86400000 * 7,
+						pendingIntent);
 			}
 		}
 	}
@@ -269,8 +281,8 @@ public class Alarm {
 		long timemills = 0L;
 		calendar.set(Calendar.DAY_OF_MONTH, day);
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		// 查检日期是否合法，不合法则表示本月没有这一天，day将肯定大于28，本次将不再设定此闹铃，将闹铃的设置推迟到下次BootReceiver接收到消息
@@ -283,8 +295,7 @@ public class Alarm {
 				calendar = getNextMonthCalendar(calendar);
 				if (isValidDate(calendar)) {
 					timemills = calendar.getTimeInMillis();
-					manager.set(AlarmManager.RTC_WAKEUP, timemills,
-							pendingIntent);
+					manager.set(AlarmManager.RTC_WAKEUP, timemills, pendingIntent);
 				}
 			}
 		}
@@ -297,17 +308,15 @@ public class Alarm {
 		// The number of days in every month is not always the same
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MONTH, AudreyCalendar.get(Calendar.MONTH));
-		calendar.set(Calendar.DAY_OF_MONTH,
-				AudreyCalendar.get(Calendar.DAY_OF_MONTH));
-		calendar.set(Calendar.HOUR_OF_DAY,
-				AudreyCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.DAY_OF_MONTH, AudreyCalendar.get(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY, AudreyCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, AudreyCalendar.get(Calendar.MINUTE));
 
 		// 在12月31号，闹钟为1月1号，则此if不成立，因为闹钟将发生在明年也就是明天，此时最好是设置上
 		// 设定为期一年的时间太长，一般手机都会关过几次机。如果很快就到下一年了，则只设置下一年的距今30天以内的。
 		// 反正每天都会定时检查一下闹钟
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
@@ -316,8 +325,8 @@ public class Alarm {
 		} else {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			if (calendar.getTimeInMillis() - System.currentTimeMillis() > 86400000 * 30) {
-				manager.set(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis(), pendingIntent);
+				manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+						pendingIntent);
 			}
 		}
 	}
@@ -408,6 +417,22 @@ public class Alarm {
 		this.mContext = mContext;
 	}
 
+	public String getImgId() {
+		return imgId;
+	}
+
+	public void setImgId(String imgId) {
+		this.imgId = imgId;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
 	/**
 	 * 存储到数据库，只在用户创建时调用一次
 	 */
@@ -438,8 +463,7 @@ public class Alarm {
 	 * @param calendar
 	 * @return
 	 */
-	public static GregorianCalendar getNextMonthCalendar(
-			GregorianCalendar calendar) {
+	public static GregorianCalendar getNextMonthCalendar(GregorianCalendar calendar) {
 		if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			calendar.set(Calendar.MONTH, Calendar.JANUARY);
@@ -492,14 +516,14 @@ public class Alarm {
 	public static void startAlarmRestore(Context context) {
 		Intent intent = new Intent();
 		intent.setAction(Alarm.ALARM_ACTION);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager manager = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
 		// manager.cancel(pendingIntent);//到底要不要先取消，按理说不要
 		// 应该是每天00：00检查一次
-		manager.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis(), 86400000, pendingIntent);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+				86400000, pendingIntent);
 	}
 
 	public static GregorianCalendar String2Calendar(String string) {
@@ -551,12 +575,63 @@ public class Alarm {
 		return ints;
 	}
 
+	/**
+	 * @return 16:00 或者 明天、后天
+	 */
 	public String getTimeDescription() {
-		return timeDescription;
+		return "zzZZ";
 	}
 
-	public void setTimeDescription(String timeDescription) {
-		this.timeDescription = timeDescription;
+	/**
+	 * @return 每周二、三响铃
+	 */
+	public String getAlarmDescription() {
+		return "zzZZ";
+	}
+
+	/**
+	 * @return 还有1小时23分
+	 */
+	public String getCountDownTime() {
+		return "";
+	}
+
+	public Bundle alarm2Bundle(Alarm alarm) {
+		Bundle bundle = new Bundle();
+		// ID
+		bundle.putString(Alarm.ALARM_ID, alarm.getId());
+
+		// 组ID
+		bundle.putString(Alarm.ALARM_GROUP_ID, alarm.getGroupID());
+
+		// 类型
+		bundle.putInt(Alarm.ALARM_TYPE, alarm.getType());
+
+		// 可取消
+		bundle.putBoolean(Alarm.ALARM_CANCELABLE, alarm.isCancelable());
+
+		// 标签
+		bundle.putString(Alarm.ALARM_TAG, alarm.getTag());
+
+		// 日期
+		bundle.putSerializable(Alarm.ALARM_CALENDAR, alarm.getAudreyCalendar());
+
+		// days_of_some
+		bundle.putIntArray(Alarm.ALARM_DAYS_OF_SOME, alarm.getDays_of_some());
+
+		// 可用
+		bundle.putBoolean(Alarm.ALARM_AVAILABLE, alarm.isAvailable());
+
+		// 备注
+		bundle.putString(Alarm.ALARM_REMARK, alarm.getRemark());
+
+		// 图片
+		bundle.putString(Alarm.ALARM_IMAGE, alarm.getImgId());
+
+		// 组名
+		bundle.putString(Alarm.ALARM_GROUP_NAME, alarm.getGroupName());
+
+		return bundle;
 	}
 
 }
