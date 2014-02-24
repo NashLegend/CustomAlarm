@@ -39,6 +39,8 @@ public class Alarm {
 	// 对于时间的描述。example:每周一二三/有可能会随着时间变化，所以用不着，一个getTimeDescription足矣
 	private Context mContext;
 
+	private Boolean isSplitter = false;
+
 	private Intent intent;
 
 	public static final int ALARM_DAILY = 1;
@@ -65,17 +67,20 @@ public class Alarm {
 
 	public Alarm(Context context, Bundle bundle) {
 		mContext = context;
-		setDays_of_some(bundle.getIntArray(ALARM_DAYS_OF_SOME));
-		setGroupID(bundle.getString(ALARM_GROUP_ID));
-		setCancelable(bundle.getBoolean(ALARM_CANCELABLE));
-		setTag(bundle.getString(ALARM_TAG));
-		setType(bundle.getInt(ALARM_TYPE));
-		setId(bundle.getString(ALARM_ID));
-		setAudreyCalendar((GregorianCalendar) bundle.getSerializable(ALARM_CALENDAR));
-		setAvailable(bundle.getBoolean(ALARM_AVAILABLE));
-		setRemark(bundle.getString(ALARM_REMARK));
-		setImgId(bundle.getString(ALARM_IMAGE));
-		setGroupName(bundle.getString(ALARM_GROUP_NAME));
+		if (bundle != null) {
+			setDays_of_some(bundle.getIntArray(ALARM_DAYS_OF_SOME));
+			setGroupID(bundle.getString(ALARM_GROUP_ID));
+			setCancelable(bundle.getBoolean(ALARM_CANCELABLE));
+			setTag(bundle.getString(ALARM_TAG));
+			setType(bundle.getInt(ALARM_TYPE));
+			setId(bundle.getString(ALARM_ID));
+			setAudreyCalendar((GregorianCalendar) bundle.getSerializable(ALARM_CALENDAR));
+			setAvailable(bundle.getBoolean(ALARM_AVAILABLE));
+			setRemark(bundle.getString(ALARM_REMARK));
+			setImgId(bundle.getString(ALARM_IMAGE));
+			setGroupName(bundle.getString(ALARM_GROUP_NAME));
+		}
+
 		// 初始化不会打开闹铃
 		// activate();
 	}
@@ -174,6 +179,17 @@ public class Alarm {
 					PendingIntent.FLAG_CANCEL_CURRENT);
 			manager.cancel(pendingIntent);
 		}
+	}
+	
+	/**
+	 * @return 距离下次响铃时间
+	 */
+	public Long getNextRingSpan() {
+		return 1L;
+	}
+	
+	public int getSplitterType() {
+		return 1;
 	}
 
 	/**
@@ -596,7 +612,7 @@ public class Alarm {
 		return "";
 	}
 
-	public Bundle alarm2Bundle(Alarm alarm) {
+	public static Bundle alarm2Bundle(Alarm alarm) {
 		Bundle bundle = new Bundle();
 		// ID
 		bundle.putString(Alarm.ALARM_ID, alarm.getId());
@@ -632,6 +648,14 @@ public class Alarm {
 		bundle.putString(Alarm.ALARM_GROUP_NAME, alarm.getGroupName());
 
 		return bundle;
+	}
+
+	public Boolean getIsSplitter() {
+		return isSplitter;
+	}
+
+	public void setIsSplitter(Boolean isSplitter) {
+		this.isSplitter = isSplitter;
 	}
 
 }

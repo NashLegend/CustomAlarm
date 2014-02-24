@@ -5,5 +5,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="menu_left_margin">64dp</dimen>
     <dimen name="menu_right_margin">64dp</dimen>
+    <dimen name="my_alarm_left">64dp</dimen>
+    <dimen name="my_alarm_splitter_height">24dp</dimen>
 
 </resources>

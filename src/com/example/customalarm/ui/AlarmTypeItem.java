@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
- * @author Pan
+ * @author NashLegend
  * 
  */
 public class AlarmTypeItem extends RelativeLayout implements BaseItem {

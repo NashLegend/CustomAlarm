@@ -5,8 +5,7 @@ import android.app.Activity;
 import android.view.Menu;
 
 /**
- * @author Pan
- *	显示闹钟详情，并可在内部删除、修改、关闭
+ * @author NashLegend
  */
 public class AlarmDetail extends Activity {
 

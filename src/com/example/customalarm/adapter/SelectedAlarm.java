@@ -11,8 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public class SelectedAlarm extends BaseAdapter {
-	private ArrayList<Alarm> list = new ArrayList<Alarm>();
+public class SelectedAlarm extends BaseBaseAdapter<Alarm> {
 	private Context mContext;
 
 	public SelectedAlarm(Context context) {

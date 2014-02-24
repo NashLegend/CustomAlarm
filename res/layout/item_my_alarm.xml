@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/alarmClock"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/my_alarm_splitter_height"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:text="@string/default_alarm_time"

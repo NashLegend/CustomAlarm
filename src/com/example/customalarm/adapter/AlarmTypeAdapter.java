@@ -11,9 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public class AlarmTypeAdapter extends BaseAdapter {
+public class AlarmTypeAdapter extends BaseBaseAdapter<AlarmType> {
 
-	private ArrayList<AlarmType> list = new ArrayList<AlarmType>();
 	private Context mContext;
 
 	public AlarmTypeAdapter(Context context) {
