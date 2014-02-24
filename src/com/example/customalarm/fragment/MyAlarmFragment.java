@@ -90,7 +90,7 @@ public class MyAlarmFragment extends Fragment {
 					Alarm alarm3 = new Alarm(getActivity(), null);
 					alarm3.setIsSplitter(true);
 					currentSplitterAlarm = alarm3;
-					alarms.add(currentSplitterAlarm);
+					alarms.add(i, currentSplitterAlarm);
 					currentSplitterType++;
 					i++;
 				}

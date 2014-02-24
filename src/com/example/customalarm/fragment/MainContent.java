@@ -24,7 +24,6 @@ public class MainContent extends Fragment implements OnClickListener {
 	private TabButton buttonSetAlarm;
 	private TabButton buttonSelectAlarm;
 	private TabButton buttonWorkAlarm;
-	private TabButton buttonFestvalAlarm;
 	private TabButton buttonAllAlarm;
 	private CustomViewPager viewPager;
 	private ViewPagerAdapter adapter;
@@ -39,7 +38,6 @@ public class MainContent extends Fragment implements OnClickListener {
 		View view = inflater.inflate(R.layout.content_main, null);
 
 		buttonAllAlarm = (TabButton) view.findViewById(R.id.alarm_all);
-		buttonFestvalAlarm = (TabButton) view.findViewById(R.id.alarm_festival);
 		buttonMyAlarm = (TabButton) view.findViewById(R.id.alarm_my);
 		buttonSelectAlarm = (TabButton) view.findViewById(R.id.alarm_select);
 		buttonSetAlarm = (TabButton) view.findViewById(R.id.alarm_set);
@@ -48,7 +46,6 @@ public class MainContent extends Fragment implements OnClickListener {
 		adapter = new ViewPagerAdapter(getFragmentManager());
 
 		buttonAllAlarm.setOnClickListener(this);
-		buttonFestvalAlarm.setOnClickListener(this);
 		buttonMyAlarm.setOnClickListener(this);
 		buttonSelectAlarm.setOnClickListener(this);
 		buttonSetAlarm.setOnClickListener(this);
@@ -74,9 +71,6 @@ public class MainContent extends Fragment implements OnClickListener {
 			break;
 		case R.id.alarm_work:
 			viewPager.setCurrentItem(3, true);
-			break;
-		case R.id.alarm_festival:
-			viewPager.setCurrentItem(4, true);
 			break;
 		case R.id.alarm_all:
 			((MainActivity) getActivity()).showRight();

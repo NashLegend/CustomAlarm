@@ -47,14 +47,6 @@
             tab:text="@string/work_alarm" />
 
         <com.example.customalarm.ui.TabButton
-            android:id="@+id/alarm_festival"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tab:btntext="@string/festival_alarm"
-            tab:text="@string/festival_alarm" />
-
-        <com.example.customalarm.ui.TabButton
             android:id="@+id/alarm_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
