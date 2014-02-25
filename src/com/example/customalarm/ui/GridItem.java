@@ -35,6 +35,7 @@ public class GridItem extends LinearLayout {
 	public void setData(GridData data) {
 		tv.setText(data.getTag());
 		iv.setImageBitmap(data.getBitmap());
+		setOnClickListener(data.getOnClickListener());
 	}
 
 }

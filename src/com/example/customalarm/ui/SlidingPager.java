@@ -8,12 +8,10 @@ public class SlidingPager extends ViewPager {
 
 	public SlidingPager(Context context) {
 		super(context);
-		// TODO 自动生成的构造函数存根
 	}
 
 	public SlidingPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO 自动生成的构造函数存根
 	}
 
 }

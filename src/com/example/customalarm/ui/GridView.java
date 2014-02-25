@@ -1,7 +1,5 @@
 package com.example.customalarm.ui;
 
-import java.util.Arrays;
-
 import com.example.customalarm.R;
 import com.example.customalarm.model.GridData;
 import com.example.customalarm.util.DisplayTools;
@@ -20,7 +18,6 @@ public class GridView extends LinearLayout {
 
 	public GridView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO 自动生成的构造函数存根
 	}
 
 	public void setData(GridData[] datas) {

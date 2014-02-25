@@ -21,6 +21,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 
 	private SlidingMenu menu;
 
+	public SlidingMenu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(SlidingMenu menu) {
+		this.menu = menu;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
