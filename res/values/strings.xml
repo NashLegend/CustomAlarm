@@ -17,5 +17,7 @@
     <string name="default_alarm_tag">tag</string>
     <string name="default_alarm_remark">remark</string>
     <string name="default_alarm_time">description</string>
+    
+    <string name="save_alarm">保存</string>
 
 </resources>

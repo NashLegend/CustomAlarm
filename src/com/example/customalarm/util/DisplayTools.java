@@ -10,15 +10,15 @@ public class DisplayTools {
 		// TODO 自动生成的构造函数存根
 	}
 	
-	public int getScreenWidth(Context context) {
+	public static int getScreenWidth(Context context) {
 		return context.getResources().getDisplayMetrics().widthPixels;
 	}
 	
-	public int getScreenHeight(Context context) {
+	public static int getScreenHeight(Context context) {
 		return context.getResources().getDisplayMetrics().heightPixels;
 	}
 	
-	public int getWindowHeight(Activity context) {
+	public static int getWindowHeight(Activity context) {
 		return context.getWindow().findViewById(Window.ID_ANDROID_CONTENT).getHeight();
 	}
 

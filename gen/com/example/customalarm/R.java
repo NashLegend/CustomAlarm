@@ -154,6 +154,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
          */
         public static final int activity_horizontal_margin=0x7f050000;
         public static final int activity_vertical_margin=0x7f050001;
+        public static final int alarm_setter_height=0x7f050006;
+        public static final int grid_item_dim=0x7f050007;
+        public static final int grid_item_pic_dim=0x7f050008;
+        public static final int grid_item_txt_dim=0x7f050009;
         public static final int menu_left_margin=0x7f050002;
         public static final int menu_right_margin=0x7f050003;
         public static final int my_alarm_left=0x7f050004;
@@ -165,42 +169,49 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int shadow=0x7f020002;
     }
     public static final class id {
-        public static final int Alarm_background=0x7f04001d;
-        public static final int LeftMenu=0x7f04001f;
+        public static final int Alarm_background=0x7f040024;
+        public static final int LeftMenu=0x7f040026;
         public static final int MainContent=0x7f040009;
         public static final int MyAlarmList=0x7f040013;
-        public static final int RightMenu=0x7f040020;
-        public static final int action_settings=0x7f040024;
-        public static final int addAlarm=0x7f04001b;
-        public static final int alarmClock=0x7f040018;
+        public static final int RightMenu=0x7f040027;
+        public static final int TagInput=0x7f040015;
+        public static final int action_settings=0x7f04002b;
+        public static final int addAlarm=0x7f040022;
+        public static final int alarmClock=0x7f04001f;
         public static final int alarm_all=0x7f04000f;
         public static final int alarm_my=0x7f04000b;
         public static final int alarm_select=0x7f04000d;
         public static final int alarm_set=0x7f04000c;
         public static final int alarm_work=0x7f04000e;
-        public static final int alarmimage=0x7f040014;
-        public static final int alarmremark=0x7f04001c;
-        public static final int alarmtag=0x7f040015;
-        public static final int alarmtime=0x7f04001a;
+        public static final int alarmimage=0x7f040019;
+        public static final int alarmremark=0x7f040023;
+        public static final int alarmtag=0x7f04001a;
+        public static final int alarmtime=0x7f040021;
         public static final int btnInTab=0x7f040006;
-        public static final int collectAlarm=0x7f040017;
+        public static final int collectAlarm=0x7f04001c;
         public static final int content=0x7f040005;
-        public static final int editAlarm=0x7f040019;
+        public static final int dateButton=0x7f040017;
+        public static final int editAlarm=0x7f040020;
         public static final int fullscreen=0x7f040003;
+        public static final int img=0x7f04001d;
         public static final int imgInTab=0x7f040008;
         public static final int left=0x7f040000;
+        public static final int linLayout=0x7f040014;
         public static final int margin=0x7f040002;
         public static final int my_alarm_left=0x7f040011;
         public static final int my_clarm_bg_img=0x7f040012;
-        public static final int noneclick=0x7f040016;
-        public static final int numAdded=0x7f04001e;
+        public static final int noneclick=0x7f04001b;
+        public static final int numAdded=0x7f040025;
         public static final int pager=0x7f040010;
         public static final int right=0x7f040001;
+        public static final int saveAlarm=0x7f040018;
         public static final int selected_view=0x7f040004;
-        public static final int slidingmenumain=0x7f040021;
-        public static final int splitterDate=0x7f040022;
-        public static final int splitterDesc=0x7f040023;
+        public static final int slidingmenumain=0x7f040028;
+        public static final int splitterDate=0x7f040029;
+        public static final int splitterDesc=0x7f04002a;
         public static final int tabs=0x7f04000a;
+        public static final int tag=0x7f04001e;
+        public static final int timeButton=0x7f040016;
         public static final int txtInTab=0x7f040007;
     }
     public static final class layout {
@@ -214,14 +225,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int fragment_selected_alarm=0x7f030007;
         public static final int fragment_set_alarm=0x7f030008;
         public static final int item_alarm_type=0x7f030009;
-        public static final int item_header_recommended_alarm=0x7f03000a;
-        public static final int item_my_alarm=0x7f03000b;
-        public static final int item_recommended_alarm=0x7f03000c;
-        public static final int item_selected_alarm=0x7f03000d;
-        public static final int menu_left=0x7f03000e;
-        public static final int menu_right=0x7f03000f;
-        public static final int slidingmenumain=0x7f030010;
-        public static final int splitter_my_alarm=0x7f030011;
+        public static final int item_gridview=0x7f03000a;
+        public static final int item_header_recommended_alarm=0x7f03000b;
+        public static final int item_my_alarm=0x7f03000c;
+        public static final int item_recommended_alarm=0x7f03000d;
+        public static final int item_selected_alarm=0x7f03000e;
+        public static final int menu_left=0x7f03000f;
+        public static final int menu_right=0x7f030010;
+        public static final int slidingmenumain=0x7f030011;
+        public static final int splitter_my_alarm=0x7f030012;
     }
     public static final class menu {
         public static final int alarm_detail=0x7f080000;
@@ -238,6 +250,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int festival_alarm=0x7f060008;
         public static final int hello_world=0x7f060002;
         public static final int my_alarm=0x7f060004;
+        public static final int save_alarm=0x7f06000e;
         public static final int selected_alarm=0x7f060006;
         public static final int set_alarm=0x7f060005;
         public static final int title_activity_alarm_detail=0x7f060003;
