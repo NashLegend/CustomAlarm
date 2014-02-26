@@ -78,14 +78,6 @@ public class MyAlarmAdapter extends BaseBaseAdapter<Alarm> {
 		return convertView;
 	}
 
-	public ArrayList<Alarm> getList() {
-		return list;
-	}
-
-	public void setList(ArrayList<Alarm> list) {
-		this.list = list;
-	}
-
 	public class ViewHolder {
 		public MyAlarmItem itemView;
 		public MyAlarmSplitter splitter;

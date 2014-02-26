@@ -13,7 +13,6 @@ public class MyAlarmSplitter extends RelativeLayout {
 	private TextView dateView;
 	private TextView desView;
 	private int SplitterType = TODAY;
-	private Context mContext;
 
 	public static final int TODAY = 1;
 	public static final int TOMORROW = 2;
@@ -25,24 +24,21 @@ public class MyAlarmSplitter extends RelativeLayout {
 
 	public MyAlarmSplitter(Context context) {
 		super(context);
-		mContext = context;
-		inflate();
+		inflate(context);
 	}
 
 	public MyAlarmSplitter(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		mContext = context;
-		inflate();
+		inflate(context);
 	}
 
 	public MyAlarmSplitter(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		mContext = context;
-		inflate();
+		inflate(context);
 	}
 
-	private void inflate() {
-		LayoutInflater inflater = (LayoutInflater) mContext
+	private void inflate(Context context) {
+		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.splitter_my_alarm, this);
 		dateView = (TextView) findViewById(R.id.splitterDate);

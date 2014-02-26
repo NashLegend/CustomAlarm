@@ -54,4 +54,12 @@ public class BaseBaseAdapter<T> extends BaseAdapter {
 		return null;
 	}
 
+	public ArrayList<T> getList() {
+		return list;
+	}
+
+	public void setList(ArrayList<T> list) {
+		this.list = list;
+	}
+
 }

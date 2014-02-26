@@ -1,21 +1,18 @@
 package com.example.customalarm.adapter;
 
-import java.util.ArrayList;
-
 import com.example.customalarm.core.Alarm;
 import com.example.customalarm.ui.AlarmSplitter;
-import com.example.customalarm.ui.RecommendedAlarmItem;
+import com.example.customalarm.ui.SelectedAlarmItem;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
-public class RecommendedAlarmAdapter extends BaseBaseAdapter<Alarm> {
+public class SelectedAlarmAdapter extends BaseBaseAdapter<Alarm> {
 	private Context mContext;
 
-	public RecommendedAlarmAdapter(Context context) {
+	public SelectedAlarmAdapter(Context context) {
 		mContext = context;
 	}
 
@@ -55,15 +52,13 @@ public class RecommendedAlarmAdapter extends BaseBaseAdapter<Alarm> {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			if (getItemViewType(position) == 1) {
-				// splitter
 				convertView = new AlarmSplitter(mContext);
 				holder.splitter = (AlarmSplitter) convertView;
 			} else {
-				convertView = new RecommendedAlarmItem(mContext);
-				holder.itemView = (RecommendedAlarmItem) convertView;
+				convertView = new SelectedAlarmItem(mContext);
+				holder.itemView = (SelectedAlarmItem) convertView;
 			}
 			convertView.setTag(holder);
-
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
@@ -79,7 +74,7 @@ public class RecommendedAlarmAdapter extends BaseBaseAdapter<Alarm> {
 	}
 
 	public class ViewHolder {
-		public RecommendedAlarmItem itemView;
+		public SelectedAlarmItem itemView;
 		public AlarmSplitter splitter;
 	}
 

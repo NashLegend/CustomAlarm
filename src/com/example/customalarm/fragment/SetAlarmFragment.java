@@ -163,21 +163,22 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-				case MotionEvent.ACTION_MOVE:
-					((MainActivity) getActivity()).getMenu().setSlideMode(
-							SlidingMenu.SLIDE_NONE);
-					break;
-				case MotionEvent.ACTION_UP:
-				case MotionEvent.ACTION_CANCEL:
-					((MainActivity) getActivity()).getMenu().setSlideMode(
-							SlidingMenu.LEFT_RIGHT);
-					break;
-
-				default:
-					break;
-				}
+				//TODO 修改版 SlidingMenu
+//				switch (event.getAction()) {
+//				case MotionEvent.ACTION_DOWN:
+//				case MotionEvent.ACTION_MOVE:
+//					((MainActivity) getActivity()).getMenu().setSlideMode(
+//							SlidingMenu.SLIDE_NONE);
+//					break;
+//				case MotionEvent.ACTION_UP:
+//				case MotionEvent.ACTION_CANCEL:
+//					((MainActivity) getActivity()).getMenu().setSlideMode(
+//							SlidingMenu.LEFT_RIGHT);
+//					break;
+//
+//				default:
+//					break;
+//				}
 				return false;
 			}
 		});

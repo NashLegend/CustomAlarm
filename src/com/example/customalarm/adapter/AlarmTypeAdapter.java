@@ -53,14 +53,6 @@ public class AlarmTypeAdapter extends BaseBaseAdapter<AlarmType> {
 		return convertView;
 	}
 
-	public ArrayList<AlarmType> getList() {
-		return list;
-	}
-
-	public void setList(ArrayList<AlarmType> list) {
-		this.list = list;
-	}
-
 	public class ViewHolder {
 		public AlarmTypeItem itemView;
 	}

@@ -102,6 +102,9 @@ public class MyAlarmFragment extends Fragment {
 				currentSplitterAlarm.setTag(MyAlarmSplitter.type2Date(tmpNum));
 				currentSplitterAlarm.setRemark(tmpNum + "个");
 			}
+			
+			adapter.setList(alarms);
+			adapter.notifyDataSetChanged();
 		}
 
 	}
