@@ -1,23 +1,15 @@
 package com.example.customalarm.model;
 
-import android.graphics.Bitmap;
 import android.view.View.OnClickListener;
 
 public class GridData {
-	private Bitmap bitmap;
+	private int imgId;
 	private String tag;
 	private OnClickListener onClickListener;
 
-	public GridData() {
-
-	}
-
-	public Bitmap getBitmap() {
-		return bitmap;
-	}
-
-	public void setBitmap(Bitmap bitmap) {
-		this.bitmap = bitmap;
+	public GridData(String tagString, int imageId) {
+		tag = tagString;
+		imgId = imageId;
 	}
 
 	public String getTag() {
@@ -34,6 +26,14 @@ public class GridData {
 
 	public void setOnClickListener(OnClickListener onClickListener) {
 		this.onClickListener = onClickListener;
+	}
+
+	public int getImgId() {
+		return imgId;
+	}
+
+	public void setImgId(int imgId) {
+		this.imgId = imgId;
 	}
 
 }

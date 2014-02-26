@@ -1,5 +1,7 @@
 package com.example.customalarm.ui;
 
+import java.util.ArrayList;
+
 import com.example.customalarm.R;
 import com.example.customalarm.model.GridData;
 import com.example.customalarm.util.DisplayTools;
@@ -21,7 +23,7 @@ public class GridPanel extends RelativeLayout {
 		super(context, attrs);
 	}
 
-	public void setData(GridData[] datas) {
+	public void setData(ArrayList<GridData> datas) {
 		int dim = (int) (getResources().getDimension(R.dimen.grid_item_dim));
 		int wid = DisplayTools.getScreenWidth(getContext());
 		int hei = DisplayTools.getWindowHeight((Activity) getContext());
@@ -30,9 +32,9 @@ public class GridPanel extends RelativeLayout {
 		int marginH = (DisplayTools.getScreenWidth(getContext()) - dim * col) / (col * 2);
 		for (int i = 0; i < lines; i++) {
 			for (int j = 0; j < col; j++) {
-				if (lines * i + j < datas.length) {
+				if (lines * i + j < datas.size()) {
 					GridItem item = new GridItem(getContext());
-					GridData data = datas[lines * i + j];
+					GridData data = datas.get(lines * i + j);
 					item.setData(data);
 					LayoutParams params = new LayoutParams(dim, dim);
 					params.leftMargin = (2 * j + 1) * marginH + j * dim;

@@ -95,11 +95,11 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
 		return calendar;
 	}
 
-	private GridData[] getDatas() {
+	private ArrayList<GridData> getDatas() {
 		return null;
 	}
 
-	public void setPager(GridData[] datas) {
+	public void setPager(ArrayList<GridData> datas) {
 		if (datas != null) {
 			int dim = (int) (getResources().getDimension(R.dimen.grid_item_dim));
 			int wid = DisplayTools.getScreenWidth(getActivity());
@@ -107,16 +107,16 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
 			int col = (int) (wid / dim);
 			int lines = (int) Math.ceil(hei / dim);
 			int tot = col * lines;
-			int numPanel = (int) Math.ceil((float) (datas.length) / tot);
+			int numPanel = (int) Math.ceil((float) (datas.size()) / tot);
 			ArrayList<GridPanel> panels = new ArrayList<GridPanel>();
 			for (int i = 0; i < numPanel; i++) {
 				int n = tot;
 				if (i == numPanel) {
-					n = datas.length - i * tot;
+					n = datas.size() - i * tot;
 				}
-				GridData[] tmpDatas = new GridData[n];
+				ArrayList<GridData> tmpDatas =new ArrayList<GridData>();
 				for (int j = 0; j < n; j++) {
-					tmpDatas[j] = datas[i * tot + j];
+					tmpDatas.add(datas.get(i * tot + j));
 				}
 				GridPanel panel = new GridPanel(getActivity());
 				LayoutParams params = new LayoutParams(-1, -1);
