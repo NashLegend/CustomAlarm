@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 
 /**
+ * Deprecated
  * @author NashLegend
  * I put this as minority
  */
