@@ -1,7 +1,5 @@
 package com.example.customalarm.adapter;
 
-import java.util.ArrayList;
-
 import com.example.customalarm.core.Alarm;
 import com.example.customalarm.ui.MyAlarmItem;
 import com.example.customalarm.ui.MyAlarmSplitter;

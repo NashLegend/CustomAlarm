@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content"
+    xmlns:tab="http://schemas.android.com/apk/res/com.example.customalarm"
+    android:id="@+id/MainContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#eeeeee"
     android:orientation="vertical" >
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <com.example.customalarm.ui.TabButton
+            android:id="@+id/alarm_my"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tab:btntext="@string/my_alarm"
+            tab:text="@string/my_alarm" />
+
+        <com.example.customalarm.ui.TabButton
+            android:id="@+id/alarm_set"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tab:btntext="@string/set_alarm"
+            tab:text="@string/set_alarm" />
+    </LinearLayout>
+
+    <com.example.customalarm.ui.CustomViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#dddddd" />
+
+</LinearLayout>

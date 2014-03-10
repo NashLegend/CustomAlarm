@@ -1,15 +1,11 @@
 package com.example.customalarm;
 
+import com.example.customalarm.adapter.ViewPagerAdapter;
 import com.example.customalarm.core.Alarm;
-import com.example.customalarm.fragment.LeftMenu;
-import com.example.customalarm.fragment.MainContent;
-import com.example.customalarm.fragment.RightMenu;
-import com.example.customalarm.util.DisplayTools;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.example.customalarm.ui.CustomViewPager;
+import com.example.customalarm.ui.TabButton;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -18,66 +14,32 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 
 /**
- * @author NashLegend
- * I put this as minority
+ * @author NashLegend I put this as minority
  */
 public class MainActivity extends FragmentActivity implements OnClickListener {
-
-	private SlidingMenu menu;
-
-	public SlidingMenu getMenu() {
-		return menu;
-	}
-
-	public void setMenu(SlidingMenu menu) {
-		this.menu = menu;
-	}
+	private TabButton buttonMyAlarm;
+	private TabButton buttonSetAlarm;
+	private CustomViewPager viewPager;
+	private ViewPagerAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		Alarm.startAlarmRestore(getApplicationContext());
-		initSlidingMenu();
-	}
-	
-	private void initSlidingMenu() {
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content, new MainContent()).commit();
-		menu = new SlidingMenu(this);
-		menu.setMode(SlidingMenu.LEFT_RIGHT);
-		menu.setBehindOffset(DisplayTools.dip2px(64, this));//
-
-		menu.setShadowWidth(20);
-		menu.setShadowDrawable(R.drawable.shadow);
-		menu.setSecondaryShadowDrawable(R.drawable.secondaryshadow);
-		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-
-		menu.setMenu(R.layout.menu_left);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.LeftMenu, new LeftMenu()).commit();
-		menu.setSecondaryMenu(R.layout.menu_right);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.RightMenu, new RightMenu()).commit();
+		initView();
 	}
 
-	public void switchContent(Fragment fragment) {
-		getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment)
-				.commit();
-	}
-	
-	public void showLeft() {
-		if (menu!=null) {
-			menu.showMenu();
-		}
-	}
-	
-	public void showRight() {
-		if (menu!=null) {
-			menu.showSecondaryMenu();
-		}
+	private void initView() {
+		
+		buttonMyAlarm = (TabButton) findViewById(R.id.alarm_my);
+		buttonSetAlarm = (TabButton) findViewById(R.id.alarm_set);
+		viewPager = (CustomViewPager) findViewById(R.id.pager);
+		adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+		buttonMyAlarm.setOnClickListener(this);
+		buttonSetAlarm.setOnClickListener(this);
+		viewPager.setAdapter(adapter);
 	}
 
 	@Override
@@ -89,8 +51,18 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO 自动生成的方法存根
 
+		switch (v.getId()) {
+		case R.id.alarm_my:
+			viewPager.setCurrentItem(0, true);
+			break;
+		case R.id.alarm_set:
+			Log.i("dd", "ssssss");
+			viewPager.setCurrentItem(1, true);
+			break;
+		default:
+			break;
+		}
 	}
 
 }

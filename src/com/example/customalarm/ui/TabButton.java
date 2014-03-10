@@ -38,6 +38,7 @@ public class TabButton extends LinearLayout {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.button_tab, this);
 		button = (Button) findViewById(R.id.btnInTab);
+		//只需要setClickable(false)就可以实现按自定义容器时按钮同时出现按下效果。
 		button.setClickable(false);
 		textView = (TextView) findViewById(R.id.txtInTab);
 		imageView = (ImageView) findViewById(R.id.imgInTab);

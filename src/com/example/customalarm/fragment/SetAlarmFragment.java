@@ -5,17 +5,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-import com.example.customalarm.MainActivity;
 import com.example.customalarm.R;
-import com.example.customalarm.R.layout;
 import com.example.customalarm.adapter.GridAdapter;
 import com.example.customalarm.core.Alarm;
-import com.example.customalarm.db.AlarmColumn;
 import com.example.customalarm.model.GridData;
 import com.example.customalarm.ui.GridPanel;
-import com.example.customalarm.ui.SlidingPager;
 import com.example.customalarm.util.DisplayTools;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -37,7 +32,6 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
 public class SetAlarmFragment extends Fragment implements OnClickListener {
@@ -114,7 +108,7 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
 				if (i == numPanel) {
 					n = datas.size() - i * tot;
 				}
-				ArrayList<GridData> tmpDatas =new ArrayList<GridData>();
+				ArrayList<GridData> tmpDatas = new ArrayList<GridData>();
 				for (int j = 0; j < n; j++) {
 					tmpDatas.add(datas.get(i * tot + j));
 				}
@@ -163,22 +157,6 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				//TODO 修改版 SlidingMenu
-//				switch (event.getAction()) {
-//				case MotionEvent.ACTION_DOWN:
-//				case MotionEvent.ACTION_MOVE:
-//					((MainActivity) getActivity()).getMenu().setSlideMode(
-//							SlidingMenu.SLIDE_NONE);
-//					break;
-//				case MotionEvent.ACTION_UP:
-//				case MotionEvent.ACTION_CANCEL:
-//					((MainActivity) getActivity()).getMenu().setSlideMode(
-//							SlidingMenu.LEFT_RIGHT);
-//					break;
-//
-//				default:
-//					break;
-//				}
 				return false;
 			}
 		});
