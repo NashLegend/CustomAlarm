@@ -57,7 +57,6 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 			viewPager.setCurrentItem(0, true);
 			break;
 		case R.id.alarm_set:
-			Log.i("dd", "ssssss");
 			viewPager.setCurrentItem(1, true);
 			break;
 		default:
