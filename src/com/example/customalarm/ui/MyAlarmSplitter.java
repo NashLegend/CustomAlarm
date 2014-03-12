@@ -14,6 +14,8 @@ public class MyAlarmSplitter extends RelativeLayout {
 	private TextView desView;
 	private int SplitterType = TODAY;
 
+	public static final int PASSED = -1;
+	public static final int BADDAY = 0;
 	public static final int TODAY = 1;
 	public static final int TOMORROW = 2;
 	public static final int ONEWEEK = 3;

@@ -23,7 +23,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int index) {
-		Log.i("ss", ""+index);
 		return list.get(index);
 	}
 

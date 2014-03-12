@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 
 import com.example.customalarm.db.AlarmColumn;
 import com.example.customalarm.db.AlarmHelper;
+import com.example.customalarm.ui.MyAlarmSplitter;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -16,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -26,7 +28,7 @@ public class Alarm {
 	private String groupID;// 天周月年里面应该都有才对
 	private String id = "";// id为UUID;这可能会导致有两个完全相同时间的闹钟，而系统把它们当作两个。需要在添加的时候进行检测
 	private GregorianCalendar AudreyCalendar;// 响铃日期，格里高利日历，奥黛丽日历
-	private int[] days_of_some;// group里面的几天，天周月年里面应该都有才对
+	private int[] days_of_some;// group里面的几天
 	private String tag;// example:birthday,festival or some what;
 	private int type;// ALARM_DAILY,ALARM_WEEKLY等等
 	private boolean cancelable = true;// 如果为true，则不可取消直到响铃完毕……
@@ -74,8 +76,7 @@ public class Alarm {
 			setTag(bundle.getString(ALARM_TAG));
 			setType(bundle.getInt(ALARM_TYPE));
 			setId(bundle.getString(ALARM_ID));
-			setAudreyCalendar((GregorianCalendar) bundle
-					.getSerializable(ALARM_CALENDAR));
+			setAudreyCalendar((GregorianCalendar) bundle.getSerializable(ALARM_CALENDAR));
 			setAvailable(bundle.getBoolean(ALARM_AVAILABLE));
 			setRemark(bundle.getString(ALARM_REMARK));
 			setImgId(bundle.getString(ALARM_IMAGE));
@@ -165,8 +166,7 @@ public class Alarm {
 	public void cancel() {
 		setIntent();
 		PendingIntent pendingIntent;
-		AlarmManager manager = (AlarmManager) mContext
-				.getSystemService(Context.ALARM_SERVICE);
+		AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 		// 如果days_of_some不为空，则为一个闹铃组，要取消一批。否则仅仅取消一个足矣
 		if (days_of_some != null && days_of_some.length > 0) {
 			for (int j = 0; j < days_of_some.length; j++) {
@@ -185,12 +185,131 @@ public class Alarm {
 	/**
 	 * @return 距离下次响铃时间
 	 */
-	public Long getNextRingSpan() {
-		return 1L;
+	public long getNextRingSpan() {
+		long span = -1l;
+		GregorianCalendar calendar = new GregorianCalendar();
+		switch (type) {
+		case ALARM_COUNT_DOWN:
+			span = this.AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+			break;
+		case ALARM_ONE_TIME:
+			span = this.AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+			break;
+		case ALARM_DAILY:
+			AudreyCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH));
+			span = this.AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+			if (span <= 0) {
+				span += 86400000;
+				AudreyCalendar.add(Calendar.DAY_OF_YEAR, 1);
+			}
+			break;
+		case ALARM_WEEKLY:
+
+			int day = AudreyCalendar.get(Calendar.DAY_OF_WEEK);// 今天
+
+			AudreyCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH));
+
+			boolean availableInThisWeek = false;
+			for (int i = 0; i < days_of_some.length; i++) {
+				int da = days_of_some[i];
+				if (da >= day) {
+					AudreyCalendar.set(Calendar.DAY_OF_WEEK, da);
+					if (AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis() > 0) {
+						availableInThisWeek = true;
+						span = AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+						break;
+					} else {
+						continue;
+					}
+				}
+			}
+			if (!availableInThisWeek) {
+				AudreyCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+						calendar.get(Calendar.DAY_OF_MONTH));
+				AudreyCalendar.add(Calendar.DAY_OF_YEAR, 7 + days_of_some[0] - day);
+				span = AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+			}
+			break;
+		case ALARM_MONTHLY:
+			AudreyCalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+			AudreyCalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+			if (!isValidDate(AudreyCalendar)
+					|| AudreyCalendar.getTimeInMillis() <= calendar.getTimeInMillis()) {
+				do {
+					AudreyCalendar.add(Calendar.MONTH, 1);
+				} while (!isValidDate(AudreyCalendar));
+			}
+			span = AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+
+			break;
+		case ALARM_YEARLY:
+			AudreyCalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+			int i = 0;
+			boolean valid = true;
+			if (!isValidDate(AudreyCalendar)
+					|| AudreyCalendar.getTimeInMillis() <= calendar.getTimeInMillis()) {
+				do {
+					AudreyCalendar.add(Calendar.YEAR, 1);
+					if (i++ > 4) {
+						valid = false;
+						break;
+					}
+				} while (!isValidDate(AudreyCalendar));
+			}
+			if (valid) {
+				span = AudreyCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+			} else {
+				// bad
+			}
+			break;
+
+		default:
+			break;
+		}
+		return span;
 	}
 
-	public int getSplitterType() {
-		return 1;
+	public int getSpanType() {
+		long span = getNextRingSpan();
+		Toast.makeText(mContext, AudreyCalendar.get(Calendar.YEAR) + "", Toast.LENGTH_SHORT).show();
+		GregorianCalendar calendar = new GregorianCalendar();
+		int tp = 0;
+		if (span > 0) {
+			if (span < 86400000) {
+				if (calendar.get(Calendar.DAY_OF_YEAR) == AudreyCalendar.get(Calendar.DAY_OF_YEAR)) {
+					tp = MyAlarmSplitter.TODAY;
+				} else {
+					tp = MyAlarmSplitter.TOMORROW;
+				}
+			} else if (span < 86400000 * 2) {
+				calendar.add(Calendar.DAY_OF_YEAR, 1);
+				if (calendar.get(Calendar.DAY_OF_YEAR) == AudreyCalendar.get(Calendar.DAY_OF_YEAR)) {
+					tp = MyAlarmSplitter.TOMORROW;
+				} else {
+					tp = MyAlarmSplitter.ONEWEEK;
+				}
+			} else if (span < 86400000 * 7) {
+				tp = MyAlarmSplitter.ONEWEEK;
+			} else if (span < 86400000 * 30) {
+				tp = MyAlarmSplitter.ONEMONTH;
+			} else if (span < 86400000 * 183) {
+				tp = MyAlarmSplitter.HALFYEAR;
+			} else if (span < 366) {
+				tp = MyAlarmSplitter.ONEYEAR;
+			} else {
+				tp = MyAlarmSplitter.MORETHANONEYEAR;
+			}
+		} else {
+			if (span == -1) {
+				tp = MyAlarmSplitter.BADDAY;
+			} else {
+				tp = MyAlarmSplitter.PASSED;
+			}
+		}
+
+		return tp;
 	}
 
 	/**
@@ -214,15 +333,12 @@ public class Alarm {
 	private void setOneTimeAlarm() {
 		if (AudreyCalendar.getTimeInMillis() - System.currentTimeMillis() > 0) {
 			// 最后一个参数必须是PendingIntent.FLAG_UPDATE_CURRENT，否则BroadcastReceiver将收不到参数。
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
-					0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			AlarmManager manager = (AlarmManager) mContext
-					.getSystemService(Context.ALARM_SERVICE);
-			manager.set(AlarmManager.RTC_WAKEUP,
-					AudreyCalendar.getTimeInMillis(), pendingIntent);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+			manager.set(AlarmManager.RTC_WAKEUP, AudreyCalendar.getTimeInMillis(), pendingIntent);
 		} else {
-			Toast.makeText(mContext, "Too early that alarm won't alarm",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "Too early that alarm won't alarm", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -231,8 +347,7 @@ public class Alarm {
 	 */
 	private void setDailyAlarm() {
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.set(Calendar.HOUR_OF_DAY,
-				AudreyCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.HOUR_OF_DAY, AudreyCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, AudreyCalendar.get(Calendar.MINUTE));
 		calendar.set(Calendar.SECOND, AudreyCalendar.get(Calendar.SECOND));
 		long mills = 0L;
@@ -244,12 +359,10 @@ public class Alarm {
 			mills = calendar.getTimeInMillis() + 86400000;
 		}
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager manager = (AlarmManager) mContext
-				.getSystemService(Context.ALARM_SERVICE);
-		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000,
-				pendingIntent);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, mills, 86400000, pendingIntent);
 	}
 
 	/**
@@ -273,17 +386,15 @@ public class Alarm {
 		for (int i = 0; i < days_of_some.length; i++) {
 			int day = days_of_some[i];
 			calendar.set(Calendar.DAY_OF_WEEK, day);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
-					day, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			AlarmManager manager = (AlarmManager) mContext
-					.getSystemService(Context.ALARM_SERVICE);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, day, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 			if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
-				manager.setRepeating(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis(), 86400000 * 7, pendingIntent);
+				manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+						86400000 * 7, pendingIntent);
 			} else {
 				manager.setRepeating(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis() + 86400000 * 7,
-						86400000 * 7, pendingIntent);
+						calendar.getTimeInMillis() + 86400000 * 7, 86400000 * 7, pendingIntent);
 			}
 		}
 	}
@@ -300,10 +411,9 @@ public class Alarm {
 		long timemills = 0L;
 		calendar.set(Calendar.DAY_OF_MONTH, day);
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager manager = (AlarmManager) mContext
-				.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 		// 查检日期是否合法，不合法则表示本月没有这一天，day将肯定大于28，本次将不再设定此闹铃，将闹铃的设置推迟到下次BootReceiver接收到消息
 		if (isValidDate(calendar)) {
 			if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
@@ -314,8 +424,7 @@ public class Alarm {
 				calendar = getNextMonthCalendar(calendar);
 				if (isValidDate(calendar)) {
 					timemills = calendar.getTimeInMillis();
-					manager.set(AlarmManager.RTC_WAKEUP, timemills,
-							pendingIntent);
+					manager.set(AlarmManager.RTC_WAKEUP, timemills, pendingIntent);
 				}
 			}
 		}
@@ -328,27 +437,22 @@ public class Alarm {
 		// The number of days in every month is not always the same
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MONTH, AudreyCalendar.get(Calendar.MONTH));
-		calendar.set(Calendar.DAY_OF_MONTH,
-				AudreyCalendar.get(Calendar.DAY_OF_MONTH));
-		calendar.set(Calendar.HOUR_OF_DAY,
-				AudreyCalendar.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.DAY_OF_MONTH, AudreyCalendar.get(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY, AudreyCalendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, AudreyCalendar.get(Calendar.MINUTE));
 
 		// 在12月31号，闹钟为1月1号，则此if不成立，因为闹钟将发生在明年也就是明天，此时最好是设置上
 		// 设定为期一年的时间太长，一般手机都会关过几次机。如果很快就到下一年了，则只设置下一年的距今30天以内的。
 		// 反正每天都会定时检查一下闹钟
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager manager = (AlarmManager) mContext
-				.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 		if (calendar.getTimeInMillis() > System.currentTimeMillis()) {
-			manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-					pendingIntent);
+			manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 		} else {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			if (calendar.getTimeInMillis() - System.currentTimeMillis() > 86400000 * 30) {
-				manager.set(AlarmManager.RTC_WAKEUP,
-						calendar.getTimeInMillis(), pendingIntent);
+				manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 			}
 		}
 	}
@@ -490,8 +594,7 @@ public class Alarm {
 	 * @param calendar
 	 * @return
 	 */
-	public static GregorianCalendar getNextMonthCalendar(
-			GregorianCalendar calendar) {
+	public static GregorianCalendar getNextMonthCalendar(GregorianCalendar calendar) {
 		if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
 			calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
 			calendar.set(Calendar.MONTH, Calendar.JANUARY);
@@ -511,8 +614,8 @@ public class Alarm {
 	public static boolean isValidDate(GregorianCalendar calendar) {
 		int month = calendar.get(Calendar.MONTH) + 1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8
-				|| month == 10 || month == 12) {
+		if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10
+				|| month == 12) {
 			if (day < 32) {
 				return true;
 			}
@@ -544,14 +647,13 @@ public class Alarm {
 	public static void startAlarmRestore(Context context) {
 		Intent intent = new Intent();
 		intent.setAction(Alarm.ALARM_ACTION);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager manager = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		// manager.cancel(pendingIntent);//到底要不要先取消，按理说不要
 		// 应该是每天00：00检查一次
-		manager.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis(), 86400000, pendingIntent);
+		manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 86400000,
+				pendingIntent);
 	}
 
 	public static GregorianCalendar String2Calendar(String string) {

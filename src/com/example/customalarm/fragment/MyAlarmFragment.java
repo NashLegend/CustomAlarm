@@ -15,6 +15,7 @@ import com.example.customalarm.ui.MyAlarmSplitter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,7 @@ public class MyAlarmFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_my_alarm, null);
 		listView = (ListView) view.findViewById(R.id.MyAlarmList);
 		imageView = (ImageView) view.findViewById(R.id.my_clarm_bg_img);
@@ -47,7 +47,6 @@ public class MyAlarmFragment extends Fragment {
 	}
 
 	public void buildAlarmList() {
-
 		Alarm todayAlarm = new Alarm(getActivity(), null);
 		todayAlarm.setIsSplitter(true);
 		todayAlarm.setTag("Today");
@@ -65,23 +64,28 @@ public class MyAlarmFragment extends Fragment {
 			AlarmComparator alarmComparator = new AlarmComparator();
 			Collections.sort(alarms, alarmComparator);
 
-			alarms.add(todayAlarm);
+			alarms.add(0, todayAlarm);
 
 			int tmpNum = 0;
 			int currentSplitterType = MyAlarmSplitter.TODAY;
 			Alarm currentSplitterAlarm = todayAlarm;
+			Alarm alarm2 = null;
 			for (int i = 1; i < alarms.size(); i++) {
-				Alarm alarm2 = alarms.get(i);
-				int tp = alarm2.getSplitterType();
-
-				if (tp == currentSplitterType) {
+				alarm2 = alarms.get(i);
+				Log.i("dddddddd", "plus__" + alarm2.getSpanType());
+				if (alarm2.getSpanType() == currentSplitterType) {
 					tmpNum++;
+					Log.i("dddddddd", "plus++" + tmpNum);
 				} else {
 					// 结算
+					Log.i("dddddddd", "check");
 					if (tmpNum == 0) {
+						Log.i("dddddddd", "0000000");
 						alarms.remove(currentSplitterAlarm);
 					} else {
-						currentSplitterAlarm.setTag(MyAlarmSplitter.type2Date(tmpNum));
+						Log.i("dddddddd", "full");
+						currentSplitterAlarm
+								.setTag(MyAlarmSplitter.type2Date(alarm2.getSpanType()));
 						currentSplitterAlarm.setRemark(tmpNum + "个");
 					}
 
@@ -99,10 +103,11 @@ public class MyAlarmFragment extends Fragment {
 			if (tmpNum == 0) {
 				alarms.remove(currentSplitterAlarm);
 			} else {
-				currentSplitterAlarm.setTag(MyAlarmSplitter.type2Date(tmpNum));
+				Log.i("dddddddd", "7");
+				currentSplitterAlarm.setTag(MyAlarmSplitter.type2Date(alarm2.getSpanType()));
 				currentSplitterAlarm.setRemark(tmpNum + "个");
 			}
-			
+
 			adapter.setList(alarms);
 			adapter.notifyDataSetChanged();
 		}
