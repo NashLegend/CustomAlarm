@@ -29,6 +29,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -36,7 +37,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 public class SetAlarmFragment extends Fragment implements OnClickListener {
 	private View view;
-	private TextView tagView;
+	private EditText tagView;
 	private Button dateButton;
 	private Button timeButton;
 	private Button confirmButton;
@@ -54,7 +55,7 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		QCalendar = getCalendarAfter30Mins();
 		view = inflater.inflate(R.layout.fragment_set_alarm, null);
-		tagView = (TextView) view.findViewById(R.id.TagInput);
+		tagView = (EditText) view.findViewById(R.id.TagInput);
 		dateButton = (Button) view.findViewById(R.id.dateButton);
 		timeButton = (Button) view.findViewById(R.id.timeButton);
 		confirmButton = (Button) view.findViewById(R.id.saveAlarm);
@@ -200,7 +201,11 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
 			bundle.putString(Alarm.ALARM_GROUP_ID, id);
 			bundle.putInt(Alarm.ALARM_TYPE, Alarm.ALARM_ONE_TIME);
 			bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
-			bundle.putString(Alarm.ALARM_TAG, tagView.getText().toString());
+			String tmptagString=tagView.getText().toString().trim();
+			if (tmptagString=="") {
+				tmptagString="快速闹钟";
+			}
+			bundle.putString(Alarm.ALARM_TAG, tmptagString);
 			bundle.putSerializable(Alarm.ALARM_CALENDAR, QCalendar);
 			bundle.putIntArray(Alarm.ALARM_DAYS_OF_SOME, null);
 			bundle.putBoolean(Alarm.ALARM_AVAILABLE, true);

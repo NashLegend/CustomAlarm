@@ -19,6 +19,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -42,6 +45,7 @@ public class MyAlarmFragment extends Fragment {
 		leftView = view.findViewById(R.id.my_alarm_left);
 		adapter = new MyAlarmAdapter(getActivity());
 		listView.setAdapter(adapter);
+
 		buildAlarmList();
 		return view;
 	}
@@ -72,46 +76,35 @@ public class MyAlarmFragment extends Fragment {
 			Alarm alarm2 = null;
 			for (int i = 1; i < alarms.size(); i++) {
 				alarm2 = alarms.get(i);
-				Log.i("dddddddd", "plus__" + alarm2.getSpanType());
-				if (alarm2.getSpanType() == currentSplitterType) {
-					tmpNum++;
-					Log.i("dddddddd", "plus++" + tmpNum);
-				} else {
-					// 结算
-					Log.i("dddddddd", "check");
-					if (tmpNum == 0) {
-						Log.i("dddddddd", "0000000");
-						alarms.remove(currentSplitterAlarm);
+				if (alarm2.getSpanType() > 0) {
+					if (alarm2.getSpanType() == currentSplitterType) {
+						tmpNum++;
 					} else {
-						Log.i("dddddddd", "full");
-						currentSplitterAlarm
-								.setTag(MyAlarmSplitter.type2Date(alarm2.getSpanType()));
-						currentSplitterAlarm.setRemark(tmpNum + "个");
+						currentSplitterAlarm.setTag(MyAlarmSplitter.type2Date(currentSplitterType));
+						currentSplitterAlarm.setRemark(":" + tmpNum + "个");
+						Alarm alarm3 = new Alarm(getActivity(), null);
+						alarm3.setIsSplitter(true);
+						currentSplitterAlarm = alarm3;
+						alarms.add(i, currentSplitterAlarm);
+						currentSplitterType = alarm2.getSpanType();
+						i++;
 					}
-
-					// ============
-
-					Alarm alarm3 = new Alarm(getActivity(), null);
-					alarm3.setIsSplitter(true);
-					currentSplitterAlarm = alarm3;
-					alarms.add(i, currentSplitterAlarm);
-					currentSplitterType++;
-					i++;
+				} else {
+					if (i < (alarms.size() - 1)) {
+						currentSplitterType = alarms.get(i + 1).getSpanType();
+					}
 				}
 			}
 
 			if (tmpNum == 0) {
 				alarms.remove(currentSplitterAlarm);
 			} else {
-				Log.i("dddddddd", "7");
 				currentSplitterAlarm.setTag(MyAlarmSplitter.type2Date(alarm2.getSpanType()));
-				currentSplitterAlarm.setRemark(tmpNum + "个");
+				currentSplitterAlarm.setRemark(":" + tmpNum + "个");
 			}
-
 			adapter.setList(alarms);
 			adapter.notifyDataSetChanged();
 		}
-
 	}
 
 	private ArrayList<Alarm> getAllAlarms(Context context) {

@@ -1,5 +1,8 @@
 package com.example.customalarm.receiver;
 
+import com.example.customalarm.RingActivity;
+import com.example.customalarm.core.Alarm;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +15,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		//在此唤起执行闹铃的Activity
+		Alarm alarm=new Alarm(context, intent.getExtras());
+		Intent intent2=new Intent();
+		intent2.setClass(context, RingActivity.class);
+		intent2.putExtras(Alarm.alarm2Bundle(alarm));
+		context.startActivity(intent2);
 	}
 	
 	

@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.example.customalarm.db.AlarmColumn;
+import com.example.customalarm.R;
 import com.example.customalarm.db.AlarmHelper;
 import com.example.customalarm.ui.MyAlarmSplitter;
 
@@ -17,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -273,7 +272,6 @@ public class Alarm {
 
 	public int getSpanType() {
 		long span = getNextRingSpan();
-		Toast.makeText(mContext, AudreyCalendar.get(Calendar.YEAR) + "", Toast.LENGTH_SHORT).show();
 		GregorianCalendar calendar = new GregorianCalendar();
 		int tp = 0;
 		if (span > 0) {
@@ -709,6 +707,8 @@ public class Alarm {
 	 * @return 16:00 或者 明天、后天
 	 */
 	public String getTimeDescription() {
+		long span = getNextRingSpan();
+		GregorianCalendar calendar = new GregorianCalendar();
 		return "zzZZ";
 	}
 
@@ -716,14 +716,74 @@ public class Alarm {
 	 * @return 每周二、三响铃
 	 */
 	public String getAlarmDescription() {
-		return "zzZZ";
+		String desString = "";
+		switch (type) {
+		case ALARM_COUNT_DOWN:
+			desString = getCountDownTime();
+			break;
+		case ALARM_ONE_TIME:
+			desString = getCountDownTime();
+			break;
+		case ALARM_DAILY:
+			desString = "每天" + AudreyCalendar.get(Calendar.HOUR_OF_DAY) + "时"
+					+ AudreyCalendar.get(Calendar.MINUTE) + "分响铃";
+			break;
+		case ALARM_MONTHLY:
+			desString = "每月" + AudreyCalendar.get(Calendar.DAY_OF_MONTH) + "日"
+					+ AudreyCalendar.get(Calendar.HOUR_OF_DAY) + "时"
+					+ AudreyCalendar.get(Calendar.MINUTE) + "分响铃";
+			break;
+		case ALARM_WEEKLY:
+			String tmpString = "";
+			for (int i = 0; i < days_of_some.length; i++) {
+				int day = days_of_some[i];
+				if (i == days_of_some.length - 1) {
+					tmpString += (" " + day + " ");
+				} else {
+					tmpString += (" " + day + "、");
+				}
+
+			}
+			desString = "每周" + tmpString + "会在" + AudreyCalendar.get(Calendar.HOUR_OF_DAY) + "时"
+					+ AudreyCalendar.get(Calendar.MINUTE) + "分响铃";
+			break;
+		case ALARM_YEARLY:
+			desString = "每年" + (AudreyCalendar.get(Calendar.MONTH) + 1) + "月"
+					+ AudreyCalendar.get(Calendar.DAY_OF_MONTH) + "日"
+					+ AudreyCalendar.get(Calendar.HOUR_OF_DAY) + "时"
+					+ AudreyCalendar.get(Calendar.MINUTE) + "分响铃";
+			break;
+
+		default:
+			break;
+		}
+		return desString;
 	}
 
 	/**
 	 * @return 还有1小时23分
 	 */
 	public String getCountDownTime() {
-		return "";
+		long span = getNextRingSpan();
+		String string = "";
+		if (span <= 0) {
+			string = mContext.getResources().getString(R.string.Alarm_out_of_date);
+		} else if (span < 60 * 1000) {
+			string = "还有不到一分钟";
+		} else if (span < 60 * 60 * 1000) {
+			string = "还有" + (span / 60000) + "分钟";
+		} else if ((span < 24 * 60 * 60 * 1000)) {
+			string = "还有" + (span / 3600000) + "小时";
+			if (((span % 3600000) / 60000) > 0) {
+				string += "零" + ((span % 3600000) / 60000) + "分";
+			}
+		} else {
+			string = "还有" + (span / 86400000) + "天";
+			if (((span % 86400000) / 3600000) > 0) {
+				string += "零" + ((span % 86400000) / 3600000) + "小时";
+			}
+		}
+		return string;
 	}
 
 	public static Bundle alarm2Bundle(Alarm alarm) {

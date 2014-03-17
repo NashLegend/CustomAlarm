@@ -1,10 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    
     <string name="app_name">CustomAlarm</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_alarm_detail">AlarmDetail</string>
+    <string name="activity_alarm_ring">RingAlarm</string>
     <string name="my_alarm">my</string>
     <string name="set_alarm">set</string>
     <string name="selected_alarm">slct</string>
@@ -19,5 +22,9 @@
     <string name="default_alarm_time">description</string>
     
     <string name="save_alarm">保存</string>
+    <string name="Instant_Alarm">快速闹钟</string>
+    <string name="Alarm_out_of_date">闹钟已过期</string>
+    
+    <string name="delete_alarm">删除闹钟</string>
 
 </resources>

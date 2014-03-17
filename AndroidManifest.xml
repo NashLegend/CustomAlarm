@@ -38,12 +38,12 @@
         </receiver>
 
         <activity
-            android:name="com.example.customalarm.AlarmDetail"
-            android:label="@string/title_activity_alarm_detail" >
+            android:name="com.example.customalarm.RingActivity"
+            android:label="@string/activity_alarm_ring" >
         </activity>
         <activity
-            android:name="com.example.customalarm.RecommendedAlarmDetail"
-            android:label="@string/title_activity_recommended_alarm_detail" >
+            android:name="com.example.customalarm.AlarmDetail"
+            android:label="@string/title_activity_alarm_detail" >
         </activity>
     </application>
 

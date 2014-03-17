@@ -58,7 +58,7 @@ public class MyAlarmAdapter extends BaseBaseAdapter<Alarm> {
 				convertView = new MyAlarmSplitter(mContext);
 				holder.splitter = (MyAlarmSplitter) convertView;
 			} else {
-				convertView = new MyAlarmItem(mContext);
+				convertView = new MyAlarmItem(mContext, this);
 				holder.itemView = (MyAlarmItem) convertView;
 			}
 			convertView.setTag(holder);
@@ -74,6 +74,29 @@ public class MyAlarmAdapter extends BaseBaseAdapter<Alarm> {
 			holder.itemView.setDataBundle(bundle);
 		}
 		return convertView;
+	}
+
+	public void deleteItem(String id) {
+		int index = -1;
+		for (int i = 0; i < list.size(); i++) {
+			Alarm alarm = list.get(i);
+			if (alarm.getId() == id) {
+				index = i;
+				break;
+			}
+		}
+		list.remove(index);
+		if (index > -1) {
+			for (int i = index - 1; i > -1; i--) {
+				Alarm alarm = list.get(i);
+				if (alarm.getIsSplitter()) {
+					list.remove(i);
+					break;
+				}
+			}
+		}
+
+		notifyDataSetChanged();
 	}
 
 	public class ViewHolder {
