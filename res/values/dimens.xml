@@ -7,7 +7,7 @@
     <dimen name="menu_right_margin">64dp</dimen>
     <dimen name="my_alarm_left">64dp</dimen>
     <dimen name="my_alarm_splitter_height">24dp</dimen>
-    <dimen name="alarm_setter_height">160dp</dimen>
+    <dimen name="alarm_setter_height">96dp</dimen>
     
     <dimen name="grid_item_dim">74dp</dimen>
     <dimen name="grid_item_pic_dim">54dp</dimen>

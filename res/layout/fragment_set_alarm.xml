@@ -40,20 +40,4 @@
             android:layout_height="wrap_content"
             android:text="@string/save_alarm" />
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="3dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
-    </LinearLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/indicator"
-        android:layout_below="@id/linLayout" />
-
 </RelativeLayout>

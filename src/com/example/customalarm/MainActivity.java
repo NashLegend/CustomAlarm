@@ -2,9 +2,15 @@ package com.example.customalarm;
 
 import com.example.customalarm.adapter.ViewPagerAdapter;
 import com.example.customalarm.core.Alarm;
+import com.example.customalarm.fragment.MyAlarmFragment;
 import com.example.customalarm.ui.CustomViewPager;
 import com.example.customalarm.ui.TabButton;
 
+import android.app.ActionBar;
+import android.app.ActionBar.TabListener;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.app.ActionBar.Tab;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -17,8 +23,6 @@ import android.view.Window;
  * @author NashLegend I put this as minority
  */
 public class MainActivity extends FragmentActivity implements OnClickListener {
-	private TabButton buttonMyAlarm;
-	private TabButton buttonSetAlarm;
 	private CustomViewPager viewPager;
 	private ViewPagerAdapter adapter;
 
@@ -31,15 +35,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	}
 
 	private void initView() {
-		
-		buttonMyAlarm = (TabButton) findViewById(R.id.alarm_my);
-		buttonSetAlarm = (TabButton) findViewById(R.id.alarm_set);
-		viewPager = (CustomViewPager) findViewById(R.id.pager);
-		adapter = new ViewPagerAdapter(getSupportFragmentManager());
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.MainContent, new MyAlarmFragment());
+		transaction.commit();
 
-		buttonMyAlarm.setOnClickListener(this);
-		buttonSetAlarm.setOnClickListener(this);
-		viewPager.setAdapter(adapter);
 	}
 
 	@Override
@@ -52,16 +52,5 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 
-		switch (v.getId()) {
-		case R.id.alarm_my:
-			viewPager.setCurrentItem(0, true);
-			break;
-		case R.id.alarm_set:
-			viewPager.setCurrentItem(1, true);
-			break;
-		default:
-			break;
-		}
 	}
-
 }

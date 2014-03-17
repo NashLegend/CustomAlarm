@@ -17,6 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Alarm alarm=new Alarm(context, intent.getExtras());
 		Intent intent2=new Intent();
+		intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent2.setClass(context, RingActivity.class);
 		intent2.putExtras(Alarm.alarm2Bundle(alarm));
 		context.startActivity(intent2);

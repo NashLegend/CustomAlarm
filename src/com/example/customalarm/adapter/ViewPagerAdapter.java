@@ -16,9 +16,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
 	public ViewPagerAdapter(FragmentManager fragmentManager) {
 		super(fragmentManager);
-		list = new ArrayList<Fragment>();
-		list.add(new MyAlarmFragment());
-		list.add(new SetAlarmFragment());
 	}
 
 	@Override

@@ -83,8 +83,9 @@ public class MyAlarmItem extends RelativeLayout implements BaseItem, OnTouchList
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				alarm.delete();
 				adapter.deleteItem(alarm.getId());
+				alarm.delete();
+				Log.i("cus", "33333");
 				dialog.dismiss();
 			}
 		}).create();

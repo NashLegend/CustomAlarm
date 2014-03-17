@@ -95,7 +95,7 @@ public class MyAlarmAdapter extends BaseBaseAdapter<Alarm> {
 				}
 			}
 		}
-
+		
 		notifyDataSetChanged();
 	}
 

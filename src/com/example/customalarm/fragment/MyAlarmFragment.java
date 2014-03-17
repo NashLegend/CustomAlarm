@@ -3,28 +3,21 @@ package com.example.customalarm.fragment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import com.example.customalarm.R;
-import com.example.customalarm.R.layout;
 import com.example.customalarm.adapter.MyAlarmAdapter;
 import com.example.customalarm.core.Alarm;
 import com.example.customalarm.db.AlarmHelper;
 import com.example.customalarm.ui.MyAlarmSplitter;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MyAlarmFragment extends Fragment {
 	private View view;
@@ -34,7 +27,7 @@ public class MyAlarmFragment extends Fragment {
 	private ImageView imageView;
 
 	public MyAlarmFragment() {
-
+		
 	}
 
 	@Override

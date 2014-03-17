@@ -8,8 +8,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_alarm_detail">AlarmDetail</string>
     <string name="activity_alarm_ring">RingAlarm</string>
-    <string name="my_alarm">my</string>
-    <string name="set_alarm">set</string>
+    <string name="my_alarm">My Alarm</string>
+    <string name="set_alarm">Set Alarm</string>
     <string name="selected_alarm">slct</string>
     <string name="work_alarm">wrk</string>
     <string name="festival_alarm">fstv</string>

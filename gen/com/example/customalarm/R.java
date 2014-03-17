@@ -122,30 +122,25 @@ containing a value of this type.
     }
     public static final class id {
         public static final int MainContent=0x7f080000;
-        public static final int MyAlarmList=0x7f08000b;
-        public static final int TagInput=0x7f08000d;
-        public static final int action_settings=0x7f080018;
-        public static final int alarm_my=0x7f080002;
-        public static final int alarm_set=0x7f080003;
-        public static final int alarmtag=0x7f080014;
-        public static final int alarmtime=0x7f080015;
-        public static final int btnInTab=0x7f080005;
-        public static final int button_delete=0x7f080008;
-        public static final int dateButton=0x7f08000f;
-        public static final int img=0x7f080012;
-        public static final int imgInTab=0x7f080007;
-        public static final int indicator=0x7f080011;
-        public static final int linLayout=0x7f08000c;
-        public static final int my_alarm_left=0x7f080009;
-        public static final int my_clarm_bg_img=0x7f08000a;
-        public static final int pager=0x7f080004;
-        public static final int saveAlarm=0x7f080010;
-        public static final int splitterDate=0x7f080016;
-        public static final int splitterDesc=0x7f080017;
-        public static final int tabs=0x7f080001;
-        public static final int tag=0x7f080013;
-        public static final int timeButton=0x7f08000e;
-        public static final int txtInTab=0x7f080006;
+        public static final int MyAlarmList=0x7f080007;
+        public static final int TagInput=0x7f080009;
+        public static final int action_settings=0x7f080013;
+        public static final int alarmtag=0x7f08000f;
+        public static final int alarmtime=0x7f080010;
+        public static final int btnInTab=0x7f080001;
+        public static final int button_delete=0x7f080004;
+        public static final int dateButton=0x7f08000b;
+        public static final int img=0x7f08000d;
+        public static final int imgInTab=0x7f080003;
+        public static final int linLayout=0x7f080008;
+        public static final int my_alarm_left=0x7f080005;
+        public static final int my_clarm_bg_img=0x7f080006;
+        public static final int saveAlarm=0x7f08000c;
+        public static final int splitterDate=0x7f080011;
+        public static final int splitterDesc=0x7f080012;
+        public static final int tag=0x7f08000e;
+        public static final int timeButton=0x7f08000a;
+        public static final int txtInTab=0x7f080002;
     }
     public static final class layout {
         public static final int activity_alarm_detail=0x7f030000;
