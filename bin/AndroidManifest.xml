@@ -45,6 +45,10 @@
             android:name="com.example.customalarm.AlarmDetail"
             android:label="@string/title_activity_alarm_detail" >
         </activity>
+        <activity
+            android:name="com.example.customalarm.SetAlarmActivity"
+            android:label="@string/title_activity_set_alarm" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,8 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    
     <string name="app_name">CustomAlarm</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -15,16 +14,14 @@
     <string name="festival_alarm">fstv</string>
     <string name="all_alarm">all</string>
     <string name="title_activity_recommended_alarm_detail">RecommendedAlarmDetail</string>
-    
-    
     <string name="default_alarm_tag">tag</string>
     <string name="default_alarm_remark">remark</string>
     <string name="default_alarm_time">description</string>
-    
     <string name="save_alarm">保存</string>
-    <string name="Instant_Alarm">快速闹钟</string>
+    <string name="Instant_Alarm">Instant Alarm</string>
     <string name="Alarm_out_of_date">闹钟已过期</string>
-    
     <string name="delete_alarm">删除闹钟</string>
+    <string name="title_activity_set_alarm">SetAlarmActivity</string>
+    <string name="more">确定</string>
 
 </resources>

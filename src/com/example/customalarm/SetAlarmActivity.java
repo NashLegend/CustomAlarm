@@ -1,64 +1,67 @@
 
-package com.example.customalarm.fragment;
+package com.example.customalarm;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-import com.example.customalarm.R;
-import com.example.customalarm.SetAlarmActivity;
 import com.example.customalarm.core.Alarm;
 
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.Fragment;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-public class SetAlarmFragment extends Fragment implements OnClickListener {
-    private View view;
+@SuppressLint("SimpleDateFormat")
+public class SetAlarmActivity extends Activity implements OnClickListener {
+
+    private ActionBar mActionBar;
     private EditText tagView;
     private Button dateButton;
     private Button timeButton;
-    private Button confirmButton;
     private GregorianCalendar QCalendar;
-    private SetAlarmActivity activity;
-
-    public SetAlarmFragment() {
-        // TODO 自动生成的构造函数存根
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_set_alarm);
+
+        mActionBar = getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowTitleEnabled(false);
+
         QCalendar = getCalendarAfter30Mins();
-        view = inflater.inflate(R.layout.fragment_set_alarm, null);
-        tagView = (EditText) view.findViewById(R.id.TagInput);
-        dateButton = (Button) view.findViewById(R.id.dateButton);
-        timeButton = (Button) view.findViewById(R.id.timeButton);
-        confirmButton = (Button) view.findViewById(R.id.saveAlarm);
+        tagView = (EditText) findViewById(R.id.TagInput);
+        dateButton = (Button) findViewById(R.id.dateButton);
+        timeButton = (Button) findViewById(R.id.timeButton);
 
-        dateButton.setText(QCalendar.get(Calendar.YEAR) + "-"
-                + QCalendar.get(Calendar.MONTH) + "-"
-                + QCalendar.get(Calendar.DAY_OF_MONTH));
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String dateString = df.format(QCalendar.getTime());
+        dateButton.setText(dateString);
 
-        timeButton.setText(QCalendar.get(Calendar.HOUR_OF_DAY) + "-"
-                + QCalendar.get(Calendar.MINUTE));
+        df = new SimpleDateFormat("HH:mm");
+        String timeString = df.format(QCalendar.getTime());
+        timeButton.setText(timeString);
 
         dateButton.setOnClickListener(this);
         timeButton.setOnClickListener(this);
-        confirmButton.setOnClickListener(this);
-
-        return view;
     }
 
     private GregorianCalendar getCalendarAfter30Mins() {
@@ -78,34 +81,60 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dateButton:
-                new DatePickerDialog(getActivity(), new OnDateSetListener() {
+                new DatePickerDialog(this, new OnDateSetListener() {
 
                     @Override
                     public void onDateSet(DatePicker view, int year,
                             int monthOfYear, int dayOfMonth) {
                         QCalendar.set(year, monthOfYear, dayOfMonth);
-                        dateButton.setText(year + "/" + (monthOfYear + 1) + "/"
-                                + dayOfMonth);
+                        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                        String dateString = df.format(QCalendar.getTime());
+                        dateButton.setText(dateString);
                     }
                 }, QCalendar.get(Calendar.YEAR), QCalendar.get(Calendar.MONTH),
                         QCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.timeButton:
-                new TimePickerDialog(getActivity(), new OnTimeSetListener() {
+                new TimePickerDialog(this, new OnTimeSetListener() {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        // TODO 自动生成的方法存根
                         QCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         QCalendar.set(Calendar.MINUTE, minute);
-                        timeButton.setText(hourOfDay + ":" + minute);
+                        DateFormat df = new SimpleDateFormat("HH:mm");
+                        String timeString = df.format(QCalendar.getTime());
+                        timeButton.setText(timeString);
                     }
                 }, QCalendar.get(Calendar.HOUR_OF_DAY), QCalendar
                         .get(Calendar.MINUTE), true).show();
                 break;
-            case R.id.saveAlarm:
-                Bundle bundle = new Bundle();
+            default:
+                break;
+        }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.set_alarm, menu);
+        return true;
+    }
+
+    public void done() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+            case R.id.save:
+                Bundle bundle = new Bundle();
                 String id = UUID.randomUUID().toString().replaceAll("-", "");
                 bundle.putString(Alarm.ALARM_ID, UUID.randomUUID().toString());
                 bundle.putString(Alarm.ALARM_GROUP_ID, id);
@@ -113,7 +142,7 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
                 bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
                 String tmptagString = tagView.getText().toString().trim();
                 if (tmptagString.equals("")) {
-                    tmptagString = "快速闹钟";
+                    tmptagString = getResources().getString(R.string.Instant_Alarm);
                 }
                 bundle.putString(Alarm.ALARM_TAG, tmptagString);
                 bundle.putSerializable(Alarm.ALARM_CALENDAR, QCalendar);
@@ -122,16 +151,16 @@ public class SetAlarmFragment extends Fragment implements OnClickListener {
                 bundle.putString(Alarm.ALARM_REMARK, "");
                 bundle.putString(Alarm.ALARM_IMAGE, null);
                 bundle.putString(Alarm.ALARM_GROUP_NAME, "");
-                Alarm alarm = new Alarm(getActivity().getApplicationContext(),
+                Alarm alarm = new Alarm(getApplicationContext().getApplicationContext(),
                         bundle);
                 alarm.activate();
                 alarm.storeInDB();
-
-                ((SetAlarmActivity) getActivity()).done();
+                done();
                 break;
-
             default:
                 break;
         }
+        return super.onOptionsItemSelected(item);
     }
+
 }

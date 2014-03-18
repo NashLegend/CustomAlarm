@@ -13,9 +13,7 @@ public class MyAlarmSplitter extends RelativeLayout {
 	private TextView dateView;
 	private TextView desView;
 	private int SplitterType = TODAY;
-
-	public static final int PASSED = -1;
-	public static final int BADDAY = 0;
+	
 	public static final int TODAY = 1;
 	public static final int TOMORROW = 2;
 	public static final int ONEWEEK = 3;
@@ -23,6 +21,8 @@ public class MyAlarmSplitter extends RelativeLayout {
 	public static final int HALFYEAR = 5;
 	public static final int ONEYEAR = 6;
 	public static final int MORETHANONEYEAR = 7;
+	public static final int PASSED = 8;
+	public static final int BADDAY = 9;
 
 	public MyAlarmSplitter(Context context) {
 		super(context);
@@ -85,9 +85,14 @@ public class MyAlarmSplitter extends RelativeLayout {
 			text = "一年内";
 			break;
 		case MORETHANONEYEAR:
-			text = "一年后";
+			text = "超过一年";
 			break;
-
+		case PASSED:
+            text = "已过期";
+            break;
+		case BADDAY:
+            text = "错误";
+            break;
 		default:
 			break;
 		}
