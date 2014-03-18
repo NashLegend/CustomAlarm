@@ -43,14 +43,16 @@ containing a value of this type.
          */
         public static final int activity_horizontal_margin=0x7f040000;
         public static final int activity_vertical_margin=0x7f040001;
-        public static final int alarm_setter_height=0x7f040006;
-        public static final int grid_item_dim=0x7f040007;
-        public static final int grid_item_pic_dim=0x7f040008;
-        public static final int grid_item_txt_dim=0x7f040009;
-        public static final int menu_left_margin=0x7f040002;
-        public static final int menu_right_margin=0x7f040003;
-        public static final int my_alarm_left=0x7f040004;
-        public static final int my_alarm_splitter_height=0x7f040005;
+        public static final int alarm_setter_height=0x7f040008;
+        public static final int grid_item_dim=0x7f040009;
+        public static final int grid_item_pic_dim=0x7f04000a;
+        public static final int grid_item_txt_dim=0x7f04000b;
+        public static final int item_horizontal_margin=0x7f040002;
+        public static final int item_vertical_margin=0x7f040003;
+        public static final int menu_left_margin=0x7f040004;
+        public static final int menu_right_margin=0x7f040005;
+        public static final int my_alarm_left=0x7f040006;
+        public static final int my_alarm_splitter_height=0x7f040007;
     }
     public static final class drawable {
         public static final int alarm_icon_birthday=0x7f020000;
@@ -108,62 +110,57 @@ containing a value of this type.
         public static final int detail_page_white_bg_down=0x7f020034;
         public static final int detail_page_white_bg_normal=0x7f020035;
         public static final int detail_title_backgroud=0x7f020036;
-        public static final int festival_img=0x7f020037;
-        public static final int guid_6_red_dot=0x7f020038;
-        public static final int guid_6_white_dot=0x7f020039;
-        public static final int hot_flag=0x7f02003a;
-        public static final int ic_launcher=0x7f02003b;
-        public static final int loved_top_img=0x7f02003c;
-        public static final int recommend_item_all=0x7f02003d;
-        public static final int secondaryshadow=0x7f02003e;
-        public static final int setting_default_user_head=0x7f02003f;
-        public static final int shadow=0x7f020040;
-        public static final int work_img=0x7f020041;
+        public static final int dialog_back=0x7f020037;
+        public static final int festival_img=0x7f020038;
+        public static final int guid_6_red_dot=0x7f020039;
+        public static final int guid_6_white_dot=0x7f02003a;
+        public static final int hot_flag=0x7f02003b;
+        public static final int ic_input_add=0x7f02003c;
+        public static final int ic_launcher=0x7f02003d;
+        public static final int ic_save=0x7f02003e;
+        public static final int item_back=0x7f02003f;
+        public static final int loved_top_img=0x7f020040;
+        public static final int recommend_item_all=0x7f020041;
+        public static final int setting_default_user_head=0x7f020042;
+        public static final int work_img=0x7f020043;
     }
     public static final class id {
         public static final int MainContent=0x7f080000;
         public static final int MyAlarmList=0x7f080002;
         public static final int TagInput=0x7f080004;
-        public static final int action_settings=0x7f080015;
-        public static final int alarm_set=0x7f080016;
+        public static final int aboveview=0x7f08000c;
+        public static final int action_settings=0x7f080011;
+        public static final int alarm_set=0x7f080012;
         public static final int alarm_set_window=0x7f080003;
-        public static final int alarmtag=0x7f080011;
-        public static final int alarmtime=0x7f080012;
-        public static final int btnInTab=0x7f080007;
-        public static final int button_delete=0x7f08000a;
+        public static final int alarmtag=0x7f08000d;
+        public static final int alarmtime=0x7f08000e;
+        public static final int button_delete=0x7f080007;
         public static final int dateButton=0x7f080006;
-        public static final int img=0x7f08000f;
-        public static final int imgInTab=0x7f080009;
-        public static final int linLayout=0x7f08000d;
-        public static final int my_alarm_fragment=0x7f08000b;
-        public static final int my_alarm_left=0x7f08000c;
+        public static final int linLayout=0x7f08000a;
+        public static final int my_alarm_fragment=0x7f080008;
+        public static final int my_alarm_left=0x7f080009;
         public static final int my_clarm_bg_img=0x7f080001;
-        public static final int save=0x7f080017;
-        public static final int saveAlarm=0x7f08000e;
-        public static final int splitterDate=0x7f080013;
-        public static final int splitterDesc=0x7f080014;
-        public static final int tag=0x7f080010;
+        public static final int save=0x7f080013;
+        public static final int saveAlarm=0x7f08000b;
+        public static final int splitterDate=0x7f08000f;
+        public static final int splitterDesc=0x7f080010;
         public static final int timeButton=0x7f080005;
-        public static final int txtInTab=0x7f080008;
     }
     public static final class layout {
         public static final int activity_alarm_detail=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int activity_ring=0x7f030002;
         public static final int activity_set_alarm=0x7f030003;
-        public static final int button_tab=0x7f030004;
-        public static final int dialog_delete=0x7f030005;
-        public static final int fragment_my_alarm=0x7f030006;
-        public static final int fragment_set_alarm=0x7f030007;
-        public static final int item_gridview=0x7f030008;
-        public static final int item_my_alarm=0x7f030009;
-        public static final int splitter_my_alarm=0x7f03000a;
+        public static final int dialog_delete=0x7f030004;
+        public static final int fragment_my_alarm=0x7f030005;
+        public static final int fragment_set_alarm=0x7f030006;
+        public static final int item_my_alarm=0x7f030007;
+        public static final int splitter_my_alarm=0x7f030008;
     }
     public static final class menu {
         public static final int alarm_detail=0x7f070000;
         public static final int main=0x7f070001;
-        public static final int recommended_alarm_detail=0x7f070002;
-        public static final int set_alarm=0x7f070003;
+        public static final int set_alarm=0x7f070002;
     }
     public static final class string {
         public static final int Alarm_out_of_date=0x7f050013;

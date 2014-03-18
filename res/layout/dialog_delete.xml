@@ -8,6 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="6dp"
         android:text="@string/delete_alarm" />
 
     <View
@@ -18,7 +19,10 @@
     <Button
         android:id="@+id/button_delete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ok" />
+        android:layout_height="32dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/dialog_back"
+        android:text="@string/ok"
+        android:textSize="16sp" />
 
 </LinearLayout>

@@ -5,6 +5,11 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-    <item android:id="@+id/alarm_set" android:visible="true" android:title="+" android:showAsAction="always"></item>
+    <item
+        android:id="@+id/alarm_set"
+        android:icon="@drawable/ic_input_add"
+        android:showAsAction="always"
+        android:title="@string/set_alarm">
+    </item>
 
 </menu>

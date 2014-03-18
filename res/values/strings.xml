@@ -14,9 +14,9 @@
     <string name="festival_alarm">fstv</string>
     <string name="all_alarm">all</string>
     <string name="title_activity_recommended_alarm_detail">RecommendedAlarmDetail</string>
-    <string name="default_alarm_tag">tag</string>
+    <string name="default_alarm_tag">Item 1</string>
     <string name="default_alarm_remark">remark</string>
-    <string name="default_alarm_time">description</string>
+    <string name="default_alarm_time">Sub item 1</string>
     <string name="save_alarm">保存</string>
     <string name="Instant_Alarm">Instant Alarm</string>
     <string name="Alarm_out_of_date">闹钟已过期</string>
