@@ -79,7 +79,9 @@ public class NumberPickerDialog extends Dialog {
                 public void onClick(View v) {
                     // TODO 自动生成的方法存根
                     if (numberSetListener != null) {
-
+                        picker.clearFocus();// if not clearFocus, u can't get
+                                            // the value by softKeyBoard from
+                                            // the EditText
                         numberSetListener.onNumberSet(dialog, picker.getValue());
                     }
                 }
