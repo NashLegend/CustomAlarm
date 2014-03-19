@@ -8,12 +8,21 @@ import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import com.example.customalarm.core.Alarm;
+import com.example.customalarm.fragments.BaseSetAlarmFragment;
+import com.example.customalarm.fragments.SetCountDownAlarmFragment;
+import com.example.customalarm.fragments.SetDailyAlarmFragment;
+import com.example.customalarm.fragments.SetInstantAlarmFragment;
+import com.example.customalarm.fragments.SetMonthlyAlarmFragment;
+import com.example.customalarm.fragments.SetWeeklyAlarmFragment;
+import com.example.customalarm.fragments.SetYearlyAlarmFragment;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -28,13 +37,10 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 @SuppressLint("SimpleDateFormat")
-public class SetAlarmActivity extends Activity implements OnClickListener {
+public class SetAlarmActivity extends Activity {
 
     private ActionBar mActionBar;
-    private EditText tagView;
-    private Button dateButton;
-    private Button timeButton;
-    private GregorianCalendar QCalendar;
+    private BaseSetAlarmFragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,70 +53,7 @@ public class SetAlarmActivity extends Activity implements OnClickListener {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
 
-        QCalendar = getCalendarAfter30Mins();
-        tagView = (EditText) findViewById(R.id.TagInput);
-        dateButton = (Button) findViewById(R.id.dateButton);
-        timeButton = (Button) findViewById(R.id.timeButton);
-
-        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-        String dateString = df.format(QCalendar.getTime());
-        dateButton.setText(dateString);
-
-        df = new SimpleDateFormat("HH:mm");
-        String timeString = df.format(QCalendar.getTime());
-        timeButton.setText(timeString);
-
-        dateButton.setOnClickListener(this);
-        timeButton.setOnClickListener(this);
-    }
-
-    private GregorianCalendar getCalendarAfter30Mins() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        if (calendar.get(Calendar.MINUTE) >= 30) {
-            calendar.add(Calendar.MINUTE, 60 - calendar.get(Calendar.MINUTE));
-        } else {
-            calendar.add(Calendar.MINUTE, 30 - calendar.get(Calendar.MINUTE));
-        }
-
-        calendar.set(Calendar.SECOND, 0);
-
-        return calendar;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.dateButton:
-                new DatePickerDialog(this, new OnDateSetListener() {
-
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                            int monthOfYear, int dayOfMonth) {
-                        QCalendar.set(year, monthOfYear, dayOfMonth);
-                        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                        String dateString = df.format(QCalendar.getTime());
-                        dateButton.setText(dateString);
-                    }
-                }, QCalendar.get(Calendar.YEAR), QCalendar.get(Calendar.MONTH),
-                        QCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                break;
-            case R.id.timeButton:
-                new TimePickerDialog(this, new OnTimeSetListener() {
-
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        QCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        QCalendar.set(Calendar.MINUTE, minute);
-                        DateFormat df = new SimpleDateFormat("HH:mm");
-                        String timeString = df.format(QCalendar.getTime());
-                        timeButton.setText(timeString);
-                    }
-                }, QCalendar.get(Calendar.HOUR_OF_DAY), QCalendar
-                        .get(Calendar.MINUTE), true).show();
-                break;
-            default:
-                break;
-        }
+        replaceFragment(new SetInstantAlarmFragment());
     }
 
     @Override
@@ -125,6 +68,13 @@ public class SetAlarmActivity extends Activity implements OnClickListener {
         startActivity(intent);
     }
 
+    public void replaceFragment(BaseSetAlarmFragment fragment) {
+        currentFragment = fragment;
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.alarm_set_window, currentFragment);
+        transaction.commit();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -134,28 +84,38 @@ public class SetAlarmActivity extends Activity implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.save:
-                Bundle bundle = new Bundle();
-                String id = UUID.randomUUID().toString().replaceAll("-", "");
-                bundle.putString(Alarm.ALARM_ID, UUID.randomUUID().toString());
-                bundle.putString(Alarm.ALARM_GROUP_ID, id);
-                bundle.putInt(Alarm.ALARM_TYPE, Alarm.ALARM_ONE_TIME);
-                bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
-                String tmptagString = tagView.getText().toString().trim();
-                if (tmptagString.equals("")) {
-                    tmptagString = getResources().getString(R.string.Instant_Alarm);
-                }
-                bundle.putString(Alarm.ALARM_TAG, tmptagString);
-                bundle.putSerializable(Alarm.ALARM_CALENDAR, QCalendar);
-                bundle.putIntArray(Alarm.ALARM_DAYS_OF_SOME, null);
-                bundle.putBoolean(Alarm.ALARM_AVAILABLE, true);
-                bundle.putString(Alarm.ALARM_REMARK, "");
-                bundle.putString(Alarm.ALARM_IMAGE, null);
-                bundle.putString(Alarm.ALARM_GROUP_NAME, "");
-                Alarm alarm = new Alarm(getApplicationContext().getApplicationContext(),
-                        bundle);
-                alarm.activate();
-                alarm.storeInDB();
+                currentFragment.saveAlarm();
                 done();
+                break;
+            case R.id.daily_set:
+                if (!(currentFragment instanceof SetDailyAlarmFragment)) {
+                    replaceFragment(new SetDailyAlarmFragment());
+                }
+                break;
+            case R.id.weekly_set:
+                if (!(currentFragment instanceof SetWeeklyAlarmFragment)) {
+                    replaceFragment(new SetWeeklyAlarmFragment());
+                }
+                break;
+            case R.id.monthly_set:
+                if (!(currentFragment instanceof SetMonthlyAlarmFragment)) {
+                    replaceFragment(new SetMonthlyAlarmFragment());
+                }
+                break;
+            case R.id.yearly_set:
+                if (!(currentFragment instanceof SetYearlyAlarmFragment)) {
+                    replaceFragment(new SetYearlyAlarmFragment());
+                }
+                break;
+            case R.id.instant_set:
+                if (!(currentFragment instanceof SetInstantAlarmFragment)) {
+                    replaceFragment(new SetInstantAlarmFragment());
+                }
+                break;
+            case R.id.count_down_set:
+                if (!(currentFragment instanceof SetCountDownAlarmFragment)) {
+                    replaceFragment(new SetCountDownAlarmFragment());
+                }
                 break;
             default:
                 break;

@@ -4,7 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="item_horizontal_margin">20dp</dimen>
-    <dimen name="item_vertical_margin">4dp</dimen>
+    <dimen name="item_vertical_margin">16dp</dimen>
     <dimen name="menu_left_margin">64dp</dimen>
     <dimen name="menu_right_margin">64dp</dimen>
     <dimen name="my_alarm_left">64dp</dimen>

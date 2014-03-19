@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * @author NashLegend
@@ -90,7 +91,10 @@ public class MyAlarmAdapter extends BaseBaseAdapter<Alarm> {
                 Alarm alarm = list.get(i);
                 if (alarm.getIsSplitter()) {
                     if (alarm.getNumInSplitter() <= 1) {
+                        Toast.makeText(mContext, alarm.getNumInSplitter() + " " + index + " " + i,
+                                Toast.LENGTH_SHORT).show();
                         list.remove(i);
+                        break;
                     } else {
                         alarm.setNumInSplitter(alarm.getNumInSplitter() - 1);
                         alarm.setRemark(":" + alarm.getNumInSplitter() + "个");

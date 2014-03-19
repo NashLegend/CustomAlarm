@@ -6,5 +6,29 @@
         android:showAsAction="always"
         android:title="@string/save_alarm">
     </item>
+    <item
+        android:id="@+id/daily_set"
+        android:showAsAction="never"
+        android:title="@string/alarm_daily"/>
+    <item
+        android:id="@+id/weekly_set"
+        android:showAsAction="never"
+        android:title="@string/alarm_weekly"/>
+    <item
+        android:id="@+id/monthly_set"
+        android:showAsAction="never"
+        android:title="@string/alarm_monthly"/>
+    <item
+        android:id="@+id/yearly_set"
+        android:showAsAction="never"
+        android:title="@string/alarm_yearly"/>
+    <item
+        android:id="@+id/instant_set"
+        android:showAsAction="never"
+        android:title="@string/alarm_instant"/>
+    <item
+        android:id="@+id/count_down_set"
+        android:showAsAction="never"
+        android:title="@string/alarm_count_down"/>
 
 </menu>
