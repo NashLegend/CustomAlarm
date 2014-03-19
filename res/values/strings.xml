@@ -6,6 +6,7 @@
     <string name="app_name">CustomAlarm</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="number_picker">Number Picker</string>
     <string name="title_activity_alarm_detail">AlarmDetail</string>
     <string name="activity_alarm_ring">RingAlarm</string>
     <string name="my_alarm">My Alarm</string>
@@ -25,5 +26,19 @@
     <string name="alarm_yearly">Yearly Alarm</string>
     <string name="alarm_instant">Instant Alarm</string>
     <string name="alarm_count_down">Countdown Alarm</string>
+    
+    <string name="dix_daily">Everyday Ring At</string>
+    <string name="dix_weekly">Every Week Ring At</string>
+    <string name="dix_monthly">Every Month Ring At</string>
+    <string name="dix_yearly">Every Year Ring At</string>
+    <string name="dix_instant">Instant Alarm</string>
+    <string name="dix_count_down">Countdown Alarm</string>
+    
+    <string name="year">Year</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string>
+    <string name="hour">Hour</string>
+    <string name="minute">Minute</string>
+    <string name="second">Second</string>
 
 </resources>

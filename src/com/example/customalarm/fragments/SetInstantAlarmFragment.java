@@ -18,6 +18,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -26,10 +27,8 @@ import android.widget.TimePicker;
 
 @SuppressLint("SimpleDateFormat")
 public class SetInstantAlarmFragment extends BaseSetAlarmFragment {
-    private EditText tagView;
     private Button dateButton;
     private Button timeButton;
-    private GregorianCalendar QCalendar;
 
     public SetInstantAlarmFragment() {
         // TODO 自动生成的构造函数存根
@@ -42,6 +41,9 @@ public class SetInstantAlarmFragment extends BaseSetAlarmFragment {
         tagView = (EditText) view.findViewById(R.id.TagInput);
         dateButton = (Button) view.findViewById(R.id.dateButton);
         timeButton = (Button) view.findViewById(R.id.timeButton);
+        
+        dateButton.setOnClickListener(this);
+        timeButton.setOnClickListener(this);
 
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String dateString = df.format(QCalendar.getTime());
@@ -52,20 +54,7 @@ public class SetInstantAlarmFragment extends BaseSetAlarmFragment {
         timeButton.setText(timeString);
         return view;
     }
-
-    private GregorianCalendar getCalendarAfter30Mins() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        if (calendar.get(Calendar.MINUTE) >= 30) {
-            calendar.add(Calendar.MINUTE, 60 - calendar.get(Calendar.MINUTE));
-        } else {
-            calendar.add(Calendar.MINUTE, 30 - calendar.get(Calendar.MINUTE));
-        }
-
-        calendar.set(Calendar.SECOND, 0);
-
-        return calendar;
-    }
-
+    
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
