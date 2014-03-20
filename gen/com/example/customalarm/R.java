@@ -120,46 +120,55 @@ containing a value of this type.
         public static final int ic_save=0x7f02003e;
         public static final int item_back=0x7f02003f;
         public static final int loved_top_img=0x7f020040;
-        public static final int recommend_item_all=0x7f020041;
-        public static final int setting_default_user_head=0x7f020042;
-        public static final int work_img=0x7f020043;
+        public static final int read_btn_back=0x7f020041;
+        public static final int recommend_item_all=0x7f020042;
+        public static final int setting_default_user_head=0x7f020043;
+        public static final int work_img=0x7f020044;
     }
     public static final class id {
+        public static final int Friday=0x7f080019;
         public static final int MainContent=0x7f080000;
+        public static final int Monday=0x7f080015;
         public static final int MyAlarmList=0x7f080002;
+        public static final int Saturday=0x7f08001a;
+        public static final int Sunday=0x7f08001b;
         public static final int TagInput=0x7f08000a;
-        public static final int aboveview=0x7f080015;
-        public static final int action_settings=0x7f08001a;
-        public static final int alarm_set=0x7f08001b;
+        public static final int Thursday=0x7f080018;
+        public static final int Tuesday=0x7f080016;
+        public static final int Wednesday=0x7f080017;
+        public static final int aboveview=0x7f08001d;
+        public static final int action_settings=0x7f080022;
+        public static final int alarm_set=0x7f080023;
         public static final int alarm_set_window=0x7f080003;
-        public static final int alarmtag=0x7f080016;
-        public static final int alarmtime=0x7f080017;
+        public static final int alarmtag=0x7f08001e;
+        public static final int alarmtime=0x7f08001f;
         public static final int button_OK=0x7f080006;
         public static final int button_delete=0x7f080004;
-        public static final int count_down_set=0x7f080022;
-        public static final int daily_set=0x7f08001d;
+        public static final int count_down_set=0x7f08002a;
+        public static final int daily_set=0x7f080025;
         public static final int dateButton=0x7f080011;
         public static final int dayText=0x7f080012;
         public static final int daysofmonth=0x7f080013;
         public static final int dix=0x7f08000b;
         public static final int hour=0x7f08000d;
         public static final int hourButton=0x7f08000c;
-        public static final int instant_set=0x7f080021;
+        public static final int instant_set=0x7f080029;
         public static final int linLayout=0x7f080009;
         public static final int minute=0x7f08000f;
         public static final int minuteButton=0x7f08000e;
-        public static final int monthly_set=0x7f08001f;
+        public static final int monthly_set=0x7f080027;
         public static final int my_alarm_fragment=0x7f080007;
         public static final int my_alarm_left=0x7f080008;
         public static final int my_clarm_bg_img=0x7f080001;
         public static final int picker=0x7f080005;
-        public static final int save=0x7f08001c;
-        public static final int splitterDate=0x7f080018;
-        public static final int splitterDesc=0x7f080019;
+        public static final int save=0x7f080024;
+        public static final int splitterDate=0x7f080020;
+        public static final int splitterDesc=0x7f080021;
         public static final int timeButton=0x7f080010;
-        public static final int weekly_set=0x7f08001e;
-        public static final int yearText=0x7f080014;
-        public static final int yearly_set=0x7f080020;
+        public static final int weekdays=0x7f080014;
+        public static final int weekly_set=0x7f080026;
+        public static final int yearText=0x7f08001c;
+        public static final int yearly_set=0x7f080028;
     }
     public static final class layout {
         public static final int activity_alarm_detail=0x7f030000;
@@ -185,6 +194,13 @@ containing a value of this type.
     }
     public static final class string {
         public static final int Alarm_out_of_date=0x7f05000e;
+        public static final int Friday=0x7f050027;
+        public static final int Monday=0x7f050023;
+        public static final int Saturday=0x7f050028;
+        public static final int Sunday=0x7f050029;
+        public static final int Thursday=0x7f050026;
+        public static final int Tuesday=0x7f050024;
+        public static final int Wednesday=0x7f050025;
         public static final int action_settings=0x7f050003;
         public static final int activity_alarm_ring=0x7f050007;
         public static final int alarm_count_down=0x7f050016;

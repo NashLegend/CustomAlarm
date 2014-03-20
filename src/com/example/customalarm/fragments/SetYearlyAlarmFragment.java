@@ -4,6 +4,7 @@ package com.example.customalarm.fragments;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import android.annotation.SuppressLint;
@@ -36,7 +37,12 @@ public class SetYearlyAlarmFragment extends BaseSetAlarmFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_set_yearly_alarm, null);
-        QCalendar = getCalendarAfter30Mins();
+        
+        QCalendar = new GregorianCalendar();
+		QCalendar.set(Calendar.HOUR_OF_DAY, 8);
+		QCalendar.set(Calendar.MINUTE, 0);
+		QCalendar.set(Calendar.MILLISECOND, 0);
+		
         tagView = (EditText) view.findViewById(R.id.TagInput);
         dateButton = (Button) view.findViewById(R.id.dateButton);
         timeButton = (Button) view.findViewById(R.id.timeButton);

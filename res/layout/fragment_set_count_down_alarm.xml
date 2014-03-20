@@ -27,6 +27,11 @@
             android:id="@+id/hourButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/read_btn_back"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/hour" />
 
         <TextView
@@ -39,6 +44,10 @@
             android:id="@+id/minuteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/read_btn_back"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/minute" />
 
         <TextView

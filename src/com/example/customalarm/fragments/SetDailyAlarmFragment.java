@@ -32,7 +32,12 @@ public class SetDailyAlarmFragment extends BaseSetAlarmFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_set_daily_alarm, null);
-        QCalendar = getCalendarAfter30Mins();
+        
+        QCalendar = new GregorianCalendar();
+		QCalendar.set(Calendar.HOUR_OF_DAY, 8);
+		QCalendar.set(Calendar.MINUTE, 0);
+		QCalendar.set(Calendar.MILLISECOND, 0);
+		
         tagView = (EditText) view.findViewById(R.id.TagInput);
         timeButton = (Button) view.findViewById(R.id.timeButton);
         timeButton.setOnClickListener(this);

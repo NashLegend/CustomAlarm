@@ -18,26 +18,30 @@
     <string name="Alarm_out_of_date">Alarm out of date</string>
     <string name="delete_alarm">delete alarm</string>
     <string name="title_activity_set_alarm">SetAlarmActivity</string>
-    
     <string name="alarm_daily">Daily Alarm</string>
     <string name="alarm_weekly">Weekly Alarm</string>
     <string name="alarm_monthly">Monthly Alarm</string>
     <string name="alarm_yearly">Yearly Alarm</string>
     <string name="alarm_instant">Instant Alarm</string>
     <string name="alarm_count_down">Countdown Alarm</string>
-    
     <string name="dix_daily">Everyday Ring At</string>
     <string name="dix_weekly">Every Week Ring At</string>
     <string name="dix_monthly">Every Month Ring At</string>
     <string name="dix_yearly">Every Year Ring At</string>
     <string name="dix_instant">Instant Alarm</string>
     <string name="dix_count_down">Countdown Alarm</string>
-    
     <string name="year">Year</string>
     <string name="month">Month</string>
     <string name="day">Day</string>
     <string name="hour">Hour</string>
     <string name="minute">Minute</string>
     <string name="second">Second</string>
+    <string name="Monday">Mon</string>
+    <string name="Tuesday">Tue</string>
+    <string name="Wednesday">Wed</string>
+    <string name="Thursday">Thu</string>
+    <string name="Friday">Fri</string>
+    <string name="Saturday">Sat</string>
+    <string name="Sunday">Sun</string>
 
 </resources>
