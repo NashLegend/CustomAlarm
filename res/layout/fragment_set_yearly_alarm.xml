@@ -11,23 +11,36 @@
         android:layout_height="@dimen/alarm_setter_height"
         android:hint="@string/Instant_Alarm" />
 
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/dix"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dix_yearly" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
 
         <Button
             android:id="@+id/timeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/dix"
-            android:text="@string/app_name" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:text="@string/hour" />
+
+        <Button
+            android:id="@+id/dateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toLeftOf="@id/timeButton"
+            android:text="@string/month" />
+
+        <TextView
+            android:id="@+id/yearText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/dateButton"
+            android:text="@string/dix_yearly" />
     </RelativeLayout>
 
 </LinearLayout>

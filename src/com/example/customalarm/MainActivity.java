@@ -1,5 +1,7 @@
 package com.example.customalarm;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,6 +57,7 @@ public class MainActivity extends Activity {
 		todayAlarm.setRemark("weather");
 
 		ArrayList<Alarm> alarms = getAllAlarms(this);
+		
 		if (alarms.size() == 0) {
 			imageView.setVisibility(View.VISIBLE);
 			listView.setVisibility(View.GONE);
@@ -63,7 +66,6 @@ public class MainActivity extends Activity {
 			listView.setVisibility(View.VISIBLE);
 			AlarmComparator alarmComparator = new AlarmComparator();
 			Collections.sort(alarms, alarmComparator);
-
 			alarms.add(0, todayAlarm);
 
 			int tmpNum = 0;
@@ -72,7 +74,7 @@ public class MainActivity extends Activity {
 			Alarm alarm2 = null;
 			for (int i = 1; i < alarms.size(); i++) {
 				alarm2 = alarms.get(i);
-				slog(alarm2.getSpanType() + "");
+				
 				if (alarm2.getSpanType() == currentSplitterType) {
 					tmpNum++;
 				} else {

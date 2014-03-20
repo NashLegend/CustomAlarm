@@ -186,7 +186,6 @@ public class MyAlarmItem extends RelativeLayout implements BaseItem,
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                 float velocityY) {
             // Left Slide To Delete
-            Log.i("shuffle", "deleting:" + deleting + "    " + (int)(velocityX / velocityY));
             if (!deleting) {
                 if (velocityX < 0 && Math.abs(velocityX / velocityY) > 2) {
                     slideLeftToDelete();
