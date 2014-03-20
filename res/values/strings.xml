@@ -15,7 +15,6 @@
     <string name="default_alarm_remark">remark</string>
     <string name="default_alarm_time">Sub item 1</string>
     <string name="save_alarm">save</string>
-    <string name="Instant_Alarm">Instant Alarm</string>
     <string name="Alarm_out_of_date">Alarm out of date</string>
     <string name="delete_alarm">delete alarm</string>
     <string name="title_activity_set_alarm">SetAlarmActivity</string>

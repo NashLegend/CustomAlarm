@@ -97,7 +97,7 @@ public class SetCountDownAlarmFragment extends BaseSetAlarmFragment {
             bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
             String tmptagString = tagView.getText().toString().trim();
             if (tmptagString.equals("")) {
-                tmptagString = getResources().getString(R.string.Instant_Alarm);
+                tmptagString = getResources().getString(R.string.alarm_count_down);
             }
             bundle.putString(Alarm.ALARM_TAG, tmptagString);
             bundle.putSerializable(Alarm.ALARM_CALENDAR, QCalendar);

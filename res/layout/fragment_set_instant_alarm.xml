@@ -9,7 +9,7 @@
         android:id="@+id/TagInput"
         android:layout_width="match_parent"
         android:layout_height="@dimen/alarm_setter_height"
-        android:hint="@string/Instant_Alarm" />
+        android:hint="@string/alarm_instant" />
 
     <RelativeLayout
         android:layout_width="match_parent"

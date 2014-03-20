@@ -184,42 +184,41 @@ containing a value of this type.
         public static final int set_alarm=0x7f070002;
     }
     public static final class string {
-        public static final int Alarm_out_of_date=0x7f05000f;
-        public static final int Instant_Alarm=0x7f05000e;
+        public static final int Alarm_out_of_date=0x7f05000e;
         public static final int action_settings=0x7f050003;
         public static final int activity_alarm_ring=0x7f050007;
-        public static final int alarm_count_down=0x7f050017;
-        public static final int alarm_daily=0x7f050012;
-        public static final int alarm_instant=0x7f050016;
-        public static final int alarm_monthly=0x7f050014;
-        public static final int alarm_weekly=0x7f050013;
-        public static final int alarm_yearly=0x7f050015;
+        public static final int alarm_count_down=0x7f050016;
+        public static final int alarm_daily=0x7f050011;
+        public static final int alarm_instant=0x7f050015;
+        public static final int alarm_monthly=0x7f050013;
+        public static final int alarm_weekly=0x7f050012;
+        public static final int alarm_yearly=0x7f050014;
         public static final int app_name=0x7f050002;
         public static final int cancel=0x7f050001;
-        public static final int day=0x7f050020;
+        public static final int day=0x7f05001f;
         public static final int default_alarm_remark=0x7f05000b;
         public static final int default_alarm_tag=0x7f05000a;
         public static final int default_alarm_time=0x7f05000c;
-        public static final int delete_alarm=0x7f050010;
-        public static final int dix_count_down=0x7f05001d;
-        public static final int dix_daily=0x7f050018;
-        public static final int dix_instant=0x7f05001c;
-        public static final int dix_monthly=0x7f05001a;
-        public static final int dix_weekly=0x7f050019;
-        public static final int dix_yearly=0x7f05001b;
+        public static final int delete_alarm=0x7f05000f;
+        public static final int dix_count_down=0x7f05001c;
+        public static final int dix_daily=0x7f050017;
+        public static final int dix_instant=0x7f05001b;
+        public static final int dix_monthly=0x7f050019;
+        public static final int dix_weekly=0x7f050018;
+        public static final int dix_yearly=0x7f05001a;
         public static final int hello_world=0x7f050004;
-        public static final int hour=0x7f050021;
-        public static final int minute=0x7f050022;
-        public static final int month=0x7f05001f;
+        public static final int hour=0x7f050020;
+        public static final int minute=0x7f050021;
+        public static final int month=0x7f05001e;
         public static final int my_alarm=0x7f050008;
         public static final int number_picker=0x7f050005;
         public static final int ok=0x7f050000;
         public static final int save_alarm=0x7f05000d;
-        public static final int second=0x7f050023;
+        public static final int second=0x7f050022;
         public static final int set_alarm=0x7f050009;
         public static final int title_activity_alarm_detail=0x7f050006;
-        public static final int title_activity_set_alarm=0x7f050011;
-        public static final int year=0x7f05001e;
+        public static final int title_activity_set_alarm=0x7f050010;
+        public static final int year=0x7f05001d;
     }
     public static final class style {
         /** 
