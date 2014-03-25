@@ -36,7 +36,7 @@ public class Alarm {
 	private boolean cancelable = true;// 如果为true，则不可取消直到响铃完毕……
 	private boolean available = true;// 是否关闭
 	private String remark = null;// 备注
-	private String imgId = "";// 或者string
+	private String ringtoneId = "";// 或者string
 								// 应该以什么方式存储图片。有的图片内置，有的联网获取。（imgId可以转成int则取id，否则联网获取）
 	private String groupName = "";// 闹铃分组名
 	// private String timeDescription = "";//
@@ -64,7 +64,7 @@ public class Alarm {
 	public static final String ALARM_DAYS_OF_SOME = "ALARM_DAYS_OF_SOME";
 	public static final String ALARM_AVAILABLE = "ALARM_AVAILABLE";
 	public static final String ALARM_REMARK = "ALARM_REMARK";
-	public static final String ALARM_IMAGE = "ALARM_IMAGE";
+	public static final String ALARM_RINGTONE = "ALARM_IMAGE";
 	public static final String ALARM_GROUP_NAME = "ALARM_GROUP_NAME";
 
 	public static final String ALARM_ACTION = "com.example.customalarm.alarm";
@@ -83,7 +83,7 @@ public class Alarm {
 					.getSerializable(ALARM_CALENDAR));
 			setAvailable(bundle.getBoolean(ALARM_AVAILABLE));
 			setRemark(bundle.getString(ALARM_REMARK));
-			setImgId(bundle.getString(ALARM_IMAGE));
+			setRingtoneId(bundle.getString(ALARM_RINGTONE));
 			setGroupName(bundle.getString(ALARM_GROUP_NAME));
 		}
 
@@ -102,7 +102,7 @@ public class Alarm {
 		intent.putExtra(ALARM_ID, id);
 		intent.putExtra(ALARM_GROUP_ID, groupID);
 		intent.putExtra(ALARM_REMARK, remark);
-		intent.putExtra(ALARM_IMAGE, imgId);
+		intent.putExtra(ALARM_RINGTONE, ringtoneId);
 		intent.putExtra(ALARM_GROUP_NAME, groupName);
 		intent.setAction(ALARM_ACTION);
 		intent.setData(Uri.fromParts("alarm", "id", id));
@@ -598,19 +598,6 @@ public class Alarm {
 		this.mContext = mContext;
 	}
 
-	public String getImgId() {
-		return imgId;
-	}
-
-	public void setImgId(String imgId) {
-		if (imgId == null || imgId.length() == 0) {
-			// 默认图片
-		} else {
-			this.imgId = imgId;
-		}
-
-	}
-
 	public String getGroupName() {
 		return groupName;
 	}
@@ -869,7 +856,7 @@ public class Alarm {
 		bundle.putString(Alarm.ALARM_REMARK, alarm.getRemark());
 
 		// 图片
-		bundle.putString(Alarm.ALARM_IMAGE, alarm.getImgId());
+		bundle.putString(Alarm.ALARM_RINGTONE, alarm.getRingtoneId());
 
 		// 组名
 		bundle.putString(Alarm.ALARM_GROUP_NAME, alarm.getGroupName());
@@ -883,6 +870,18 @@ public class Alarm {
 
 	public void setNumInSplitter(int numInSplitter) {
 		this.numInSplitter = numInSplitter;
+	}
+
+	public String getRingtoneId() {
+		return ringtoneId;
+	}
+
+	public void setRingtoneId(String ringtoneId) {
+		if (ringtoneId == null || ringtoneId.length() == 0) {
+			// 默认图片
+		} else {
+			this.ringtoneId = ringtoneId;
+		}
 	}
 
 }

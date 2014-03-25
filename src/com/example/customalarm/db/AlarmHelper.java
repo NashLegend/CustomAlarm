@@ -61,7 +61,7 @@ public class AlarmHelper {
 
         values.put(AlarmColumn.ALARM_REMARK, alarm.getRemark());
 
-        values.put(AlarmColumn.ALARM_IMAGE, alarm.getImgId());
+        values.put(AlarmColumn.ALARM_RINGTONE, alarm.getRingtoneId());
 
         values.put(AlarmColumn.ALARM_GROUPNAME, alarm.getGroupName());
 
@@ -121,9 +121,9 @@ public class AlarmHelper {
                 bundle.putString(Alarm.ALARM_REMARK,
                         cursor.getString(AlarmColumn.ALARM_REMARK_COLUMN));
 
-                // 图片
-                bundle.putString(Alarm.ALARM_IMAGE,
-                        cursor.getString(AlarmColumn.ALARM_IMAGE_COLUMN));
+                // 铃声
+                bundle.putString(Alarm.ALARM_RINGTONE,
+                        cursor.getString(AlarmColumn.ALARM_RINGTONE_COLUMN));
 
                 // 组名
                 bundle.putString(Alarm.ALARM_GROUP_NAME,
@@ -190,8 +190,8 @@ public class AlarmHelper {
                     cursor.getString(AlarmColumn.ALARM_REMARK_COLUMN));
 
             // 图片
-            bundle.putString(Alarm.ALARM_IMAGE,
-                    cursor.getString(AlarmColumn.ALARM_IMAGE_COLUMN));
+            bundle.putString(Alarm.ALARM_RINGTONE,
+                    cursor.getString(AlarmColumn.ALARM_RINGTONE_COLUMN));
 
             // 组名
             bundle.putString(Alarm.ALARM_GROUP_NAME,

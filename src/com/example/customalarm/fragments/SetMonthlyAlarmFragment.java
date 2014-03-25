@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.customalarm.R;
@@ -54,6 +55,9 @@ public class SetMonthlyAlarmFragment extends BaseSetAlarmFragment {
 		DateFormat df = new SimpleDateFormat("HH:mm");
 		String timeString = df.format(QCalendar.getTime());
 		timeButton.setText(timeString);
+
+		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
+		setSpinnerContent();
 
 		return view;
 	}
@@ -115,7 +119,10 @@ public class SetMonthlyAlarmFragment extends BaseSetAlarmFragment {
 		bundle.putIntArray(Alarm.ALARM_DAYS_OF_SOME, null);
 		bundle.putBoolean(Alarm.ALARM_AVAILABLE, true);
 		bundle.putString(Alarm.ALARM_REMARK, "");
-		bundle.putString(Alarm.ALARM_IMAGE, null);
+		if (ringtones != null && ringtones.length > 0) {
+			bundle.putString(Alarm.ALARM_RINGTONE,
+					ringtones[ringSpinner.getSelectedItemPosition()]);
+		}
 		bundle.putString(Alarm.ALARM_GROUP_NAME, "");
 		Alarm alarm = new Alarm(getActivity().getApplicationContext(), bundle);
 		alarm.activate();

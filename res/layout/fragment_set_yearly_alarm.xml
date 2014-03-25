@@ -42,12 +42,18 @@
 
         <TextView
             android:id="@+id/yearText"
-            android:layout_marginRight="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
             android:layout_toLeftOf="@id/dateButton"
             android:text="@string/dix_yearly" />
     </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/ringSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </Spinner>
 
 </LinearLayout>

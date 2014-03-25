@@ -20,7 +20,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
 			+ AlarmColumn.ALARM_DAYS + " text,"
 			+ AlarmColumn.ALARM_AVAILABLE + " text,"
 			+ AlarmColumn.ALARM_REMARK + " text,"
-			+ AlarmColumn.ALARM_IMAGE + " text,"
+			+ AlarmColumn.ALARM_RINGTONE + " text,"
 			+ AlarmColumn.ALARM_GROUPNAME + " text)";
 	public AlarmDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
