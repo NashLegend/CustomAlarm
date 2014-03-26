@@ -37,7 +37,7 @@ public class Alarm {
 	private boolean available = true;// 是否关闭
 	private String remark = null;// 备注
 	private String ringtoneId = "";// 或者string
-								// 应该以什么方式存储图片。有的图片内置，有的联网获取。（imgId可以转成int则取id，否则联网获取）
+									// 应该以什么方式存储图片。有的图片内置，有的联网获取。（imgId可以转成int则取id，否则联网获取）
 	private String groupName = "";// 闹铃分组名
 	// private String timeDescription = "";//
 	// 对于时间的描述。example:每周一二三/有可能会随着时间变化，所以用不着，一个getTimeDescription足矣
@@ -115,8 +115,6 @@ public class Alarm {
 	public void activate() {
 		setIntent();
 		if (available) {
-			// TODO 这时候应该有一些其他操作，比如以前没有这个闹钟的时候，要在闹钟列表中添加。如果以前有，则激活。
-			// 不过这些方法应该写在其他地方而这不是这里
 			setUp();
 		} else {
 			cancel();

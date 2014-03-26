@@ -43,5 +43,7 @@
     <string name="Friday">Fri</string>
     <string name="Saturday">Sat</string>
     <string name="Sunday">Sun</string>
+    <string name="Stop">Stop</string>
+    <string name="Delay">Delay</string>
 
 </resources>

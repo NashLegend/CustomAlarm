@@ -44,14 +44,9 @@ public class SetWeeklyAlarmFragment extends BaseSetAlarmFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_set_weekly_alarm, null);
-
-		QCalendar = new GregorianCalendar();
-		QCalendar.set(Calendar.HOUR_OF_DAY, 8);
-		QCalendar.set(Calendar.MINUTE, 0);
-		QCalendar.set(Calendar.MILLISECOND, 0);
-
 		tagView = (EditText) view.findViewById(R.id.TagInput);
 		timeButton = (Button) view.findViewById(R.id.timeButton);
+		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 		monBox = (CheckBox) view.findViewById(R.id.Monday);
 		tueBox = (CheckBox) view.findViewById(R.id.Tuesday);
 		wedBox = (CheckBox) view.findViewById(R.id.Wednesday);
@@ -59,14 +54,35 @@ public class SetWeeklyAlarmFragment extends BaseSetAlarmFragment {
 		friBox = (CheckBox) view.findViewById(R.id.Friday);
 		satBox = (CheckBox) view.findViewById(R.id.Saturday);
 		sunBox = (CheckBox) view.findViewById(R.id.Sunday);
-
 		timeButton.setOnClickListener(this);
+
+		if (setMode == BaseSetAlarmFragment.MODE_ADD_ALARM) {
+
+			QCalendar = new GregorianCalendar();
+			QCalendar.set(Calendar.HOUR_OF_DAY, 8);
+			QCalendar.set(Calendar.MINUTE, 0);
+			QCalendar.set(Calendar.MILLISECOND, 0);
+
+		} else {
+			tagView.setText(alarm.getTag());
+			QCalendar = alarm.getAudreyCalendar();
+			// TODO
+			CheckBox[] boxs = { sunBox, monBox, tueBox, wedBox, thuBox, friBox,
+					satBox };
+			for (int i = 0; i < boxs.length; i++) {
+				CheckBox checkBox = boxs[i];
+				checkBox.setChecked(false);
+			}
+
+			int day_of_some[] = alarm.getDays_of_some();
+			for (int i = 0; i < day_of_some.length; i++) {
+				boxs[day_of_some[i]].setChecked(true);
+			}
+		}
 
 		DateFormat df = new SimpleDateFormat("HH:mm");
 		String timeString = df.format(QCalendar.getTime());
 		timeButton.setText(timeString);
-
-		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 		setSpinnerContent();
 
 		return view;
@@ -109,7 +125,7 @@ public class SetWeeklyAlarmFragment extends BaseSetAlarmFragment {
 
 		Bundle bundle = new Bundle();
 		String id = UUID.randomUUID().toString().replaceAll("-", "");
-		bundle.putString(Alarm.ALARM_ID, UUID.randomUUID().toString());
+		bundle.putString(Alarm.ALARM_ID, id);
 		bundle.putString(Alarm.ALARM_GROUP_ID, id);
 		bundle.putInt(Alarm.ALARM_TYPE, Alarm.ALARM_WEEKLY);
 		bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
@@ -130,5 +146,29 @@ public class SetWeeklyAlarmFragment extends BaseSetAlarmFragment {
 		Alarm alarm = new Alarm(getActivity().getApplicationContext(), bundle);
 		alarm.activate();
 		alarm.storeInDB();
+	}
+
+	@Override
+	public void editAlarm() {
+		CheckBox[] boxs = { sunBox, monBox, tueBox, wedBox, thuBox, friBox,
+				satBox };
+		String day_of_String = "";
+		for (int i = 0; i < boxs.length; i++) {
+			CheckBox box = boxs[i];
+			if (box.isChecked()) {
+				day_of_String += (i + 1) + "_";
+			}
+		}
+		int day_of_some[] = Alarm.String2Days(day_of_String);
+
+		String tmptagString = tagView.getText().toString().trim();
+		if (tmptagString.equals("")) {
+			tmptagString = getResources().getString(R.string.alarm_daily);
+		}
+		alarm.setDays_of_some(day_of_some);
+		alarm.setAudreyCalendar(QCalendar);
+		alarm.setTag(tmptagString);
+		alarm.edit();
+		alarm.activate();
 	}
 }

@@ -33,21 +33,26 @@ public class SetDailyAlarmFragment extends BaseSetAlarmFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_set_daily_alarm, null);
-
-		QCalendar = new GregorianCalendar();
-		QCalendar.set(Calendar.HOUR_OF_DAY, 8);
-		QCalendar.set(Calendar.MINUTE, 0);
-		QCalendar.set(Calendar.MILLISECOND, 0);
-
 		tagView = (EditText) view.findViewById(R.id.TagInput);
 		timeButton = (Button) view.findViewById(R.id.timeButton);
+		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 		timeButton.setOnClickListener(this);
-
+		
+		if (setMode == BaseSetAlarmFragment.MODE_ADD_ALARM) {
+			
+			QCalendar = new GregorianCalendar();
+			QCalendar.set(Calendar.HOUR_OF_DAY, 8);
+			QCalendar.set(Calendar.MINUTE, 0);
+			QCalendar.set(Calendar.MILLISECOND, 0);
+			
+		} else {
+			tagView.setText(alarm.getTag());
+			QCalendar=alarm.getAudreyCalendar();
+		}
+		
 		DateFormat df = new SimpleDateFormat("HH:mm");
 		String timeString = df.format(QCalendar.getTime());
 		timeButton.setText(timeString);
-
-		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 		setSpinnerContent();
 
 		return view;
@@ -81,7 +86,7 @@ public class SetDailyAlarmFragment extends BaseSetAlarmFragment {
 	public void saveAlarm() {
 		Bundle bundle = new Bundle();
 		String id = UUID.randomUUID().toString().replaceAll("-", "");
-		bundle.putString(Alarm.ALARM_ID, UUID.randomUUID().toString());
+		bundle.putString(Alarm.ALARM_ID, id);
 		bundle.putString(Alarm.ALARM_GROUP_ID, id);
 		bundle.putInt(Alarm.ALARM_TYPE, Alarm.ALARM_DAILY);
 		bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
@@ -102,6 +107,18 @@ public class SetDailyAlarmFragment extends BaseSetAlarmFragment {
 		Alarm alarm = new Alarm(getActivity().getApplicationContext(), bundle);
 		alarm.activate();
 		alarm.storeInDB();
+	}
+
+	@Override
+	public void editAlarm() {
+		String tmptagString = tagView.getText().toString().trim();
+		if (tmptagString.equals("")) {
+			tmptagString = getResources().getString(R.string.alarm_daily);
+		}
+		alarm.setAudreyCalendar(QCalendar);
+		alarm.setTag(tmptagString);
+		alarm.edit();
+		alarm.activate();
 	}
 
 }

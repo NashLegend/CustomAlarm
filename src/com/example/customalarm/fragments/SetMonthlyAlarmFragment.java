@@ -35,28 +35,33 @@ public class SetMonthlyAlarmFragment extends BaseSetAlarmFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		QCalendar = new GregorianCalendar();
-		QCalendar.set(Calendar.MONTH, Calendar.JANUARY);// 设为一月则可接收所有日期
-		QCalendar.set(Calendar.DAY_OF_MONTH, 1);
-		QCalendar.set(Calendar.HOUR_OF_DAY, 8);
-		QCalendar.set(Calendar.MINUTE, 0);
-		QCalendar.set(Calendar.MILLISECOND, 0);
-
 		view = inflater.inflate(R.layout.fragment_set_monthly_alarm, null);
 		tagView = (EditText) view.findViewById(R.id.TagInput);
 		dayButton = (Button) view.findViewById(R.id.daysofmonth);
 		timeButton = (Button) view.findViewById(R.id.timeButton);
+		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 
 		dayButton.setOnClickListener(this);
 		timeButton.setOnClickListener(this);
 
-		dayButton.setText("1");
+		if (setMode == BaseSetAlarmFragment.MODE_ADD_ALARM) {
 
+			QCalendar = new GregorianCalendar();
+			QCalendar.set(Calendar.MONTH, Calendar.JANUARY);// 设为一月则可接收所有日期
+			QCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			QCalendar.set(Calendar.HOUR_OF_DAY, 8);
+			QCalendar.set(Calendar.MINUTE, 0);
+			QCalendar.set(Calendar.MILLISECOND, 0);
+
+		} else {
+			tagView.setText(alarm.getTag());
+			QCalendar=alarm.getAudreyCalendar();
+		}
+		
+		dayButton.setText(QCalendar.get(Calendar.DAY_OF_MONTH) + "");
 		DateFormat df = new SimpleDateFormat("HH:mm");
 		String timeString = df.format(QCalendar.getTime());
 		timeButton.setText(timeString);
-
-		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 		setSpinnerContent();
 
 		return view;
@@ -106,7 +111,7 @@ public class SetMonthlyAlarmFragment extends BaseSetAlarmFragment {
 	public void saveAlarm() {
 		Bundle bundle = new Bundle();
 		String id = UUID.randomUUID().toString().replaceAll("-", "");
-		bundle.putString(Alarm.ALARM_ID, UUID.randomUUID().toString());
+		bundle.putString(Alarm.ALARM_ID, id);
 		bundle.putString(Alarm.ALARM_GROUP_ID, id);
 		bundle.putInt(Alarm.ALARM_TYPE, Alarm.ALARM_MONTHLY);
 		bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
@@ -127,6 +132,18 @@ public class SetMonthlyAlarmFragment extends BaseSetAlarmFragment {
 		Alarm alarm = new Alarm(getActivity().getApplicationContext(), bundle);
 		alarm.activate();
 		alarm.storeInDB();
+	}
+
+	@Override
+	public void editAlarm() {
+		String tmptagString = tagView.getText().toString().trim();
+		if (tmptagString.equals("")) {
+			tmptagString = getResources().getString(R.string.alarm_daily);
+		}
+		alarm.setAudreyCalendar(QCalendar);
+		alarm.setTag(tmptagString);
+		alarm.edit();
+		alarm.activate();
 	}
 
 }

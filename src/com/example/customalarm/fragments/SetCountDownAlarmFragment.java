@@ -21,7 +21,7 @@ import com.example.customalarm.ui.NumberPickerDialog;
 public class SetCountDownAlarmFragment extends BaseSetAlarmFragment {
 	private Button hourButton;
 	private Button minuteButton;
-	private int hour = 3;
+	private int hour = 0;
 	private int minute = 0;
 
 	public SetCountDownAlarmFragment() {
@@ -35,14 +35,29 @@ public class SetCountDownAlarmFragment extends BaseSetAlarmFragment {
 		tagView = (EditText) view.findViewById(R.id.TagInput);
 		hourButton = (Button) view.findViewById(R.id.hourButton);
 		minuteButton = (Button) view.findViewById(R.id.minuteButton);
+		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 		hourButton.setOnClickListener(this);
 		minuteButton.setOnClickListener(this);
 
+		if (setMode == BaseSetAlarmFragment.MODE_ADD_ALARM) {
+			hour = 3;
+			minute = 0;
+		} else {
+			tagView.setText(alarm.getTag());
+			int span = (int) ((alarm.getAudreyCalendar().getTimeInMillis() - System
+					.currentTimeMillis()) / 60000);// 分钟
+
+			if (span > 0) {
+				hour = span / 60;
+				minute = span % 60;
+			} else {
+				hour = 3;
+				minute = 0;
+			}
+		}
+
 		hourButton.setText("3");
-
 		minuteButton.setText("0");
-
-		ringSpinner = (Spinner) view.findViewById(R.id.ringSpinner);
 		setSpinnerContent();
 
 		return view;
@@ -99,7 +114,7 @@ public class SetCountDownAlarmFragment extends BaseSetAlarmFragment {
 			QCalendar.add(Calendar.MINUTE, minutes);
 			Bundle bundle = new Bundle();
 			String id = UUID.randomUUID().toString().replaceAll("-", "");
-			bundle.putString(Alarm.ALARM_ID, UUID.randomUUID().toString());
+			bundle.putString(Alarm.ALARM_ID, id);
 			bundle.putString(Alarm.ALARM_GROUP_ID, id);
 			bundle.putInt(Alarm.ALARM_TYPE, Alarm.ALARM_COUNT_DOWN);
 			bundle.putBoolean(Alarm.ALARM_CANCELABLE, true);
@@ -125,6 +140,25 @@ public class SetCountDownAlarmFragment extends BaseSetAlarmFragment {
 		} else {
 			// Too nearly
 		}
+	}
 
+	@Override
+	public void editAlarm() {
+		QCalendar = new GregorianCalendar();
+		int minutes = hour * 60 + minute;
+		if (minutes > 0) {
+			QCalendar.add(Calendar.MINUTE, minutes);
+
+			String tmptagString = tagView.getText().toString().trim();
+			if (tmptagString.equals("")) {
+				tmptagString = getResources().getString(
+						R.string.alarm_count_down);
+			}
+
+			alarm.setAudreyCalendar(QCalendar);
+			alarm.setTag(tmptagString);
+			alarm.edit();
+			alarm.activate();
+		}
 	}
 }
