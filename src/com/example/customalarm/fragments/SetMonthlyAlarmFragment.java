@@ -51,7 +51,8 @@ public class SetMonthlyAlarmFragment extends BaseSetAlarmFragment {
 			QCalendar.set(Calendar.DAY_OF_MONTH, 1);
 			QCalendar.set(Calendar.HOUR_OF_DAY, 8);
 			QCalendar.set(Calendar.MINUTE, 0);
-			QCalendar.set(Calendar.MILLISECOND, 0);
+			QCalendar.set(Calendar.SECOND, 0);
+            QCalendar.set(Calendar.MILLISECOND, 0);
 
 		} else {
 			tagView.setText(alarm.getTag());
